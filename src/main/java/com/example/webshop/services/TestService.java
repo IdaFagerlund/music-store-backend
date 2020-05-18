@@ -1,6 +1,7 @@
 package com.example.webshop.services;
 
 import com.example.webshop.entities.Test;
+import com.example.webshop.exceptions.ValidationException;
 import com.example.webshop.models.TestModel;
 import com.example.webshop.repositories.TestRepository;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,9 @@ public class TestService {
     }
 
     public Test save(TestModel testModel) {
+        if (testModel.getWord() == null) {
+            throw new ValidationException("missing word");
+        }
         return testRepository.save(new Test(testModel.getWord()));
     }
 
