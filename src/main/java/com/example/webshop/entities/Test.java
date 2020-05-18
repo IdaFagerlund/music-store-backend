@@ -20,11 +20,6 @@ public class Test {
         this.word = word;
     }
 
-    public Test(Integer id, String word) {
-        this.id = id;
-        this.word = word;
-    }
-
     public Integer getId() {
         return id;
     }
