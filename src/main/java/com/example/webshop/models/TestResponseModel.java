@@ -1,13 +1,13 @@
 package com.example.webshop.models;
 
-public class TestModel {
+public class TestResponseModel {
 
     private String word;
 
-    public TestModel() {
+    public TestResponseModel() {
     }
 
-    public TestModel(String word) {
+    public TestResponseModel(String word) {
         this.word = word;
     }
 

@@ -1,13 +1,13 @@
 package com.example.webshop.models;
 
-public class ErrorModel {
+public class ErrorResponseModel {
 
     private String error;
 
-    public ErrorModel() {
+    public ErrorResponseModel() {
     }
 
-    public ErrorModel(String error) {
+    public ErrorResponseModel(String error) {
         this.error = error;
     }
 

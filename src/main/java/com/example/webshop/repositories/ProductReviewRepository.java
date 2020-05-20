@@ -1,4 +1,7 @@
 package com.example.webshop.repositories;
 
-public interface ProductReviewRepository {
+import com.example.webshop.entities.ProductReview;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProductReviewRepository extends JpaRepository<ProductReview, Integer> {
 }

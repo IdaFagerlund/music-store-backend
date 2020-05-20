@@ -2,7 +2,7 @@ package com.example.webshop.services;
 
 import com.example.webshop.entities.Test;
 import com.example.webshop.exceptions.ValidationException;
-import com.example.webshop.models.TestModel;
+import com.example.webshop.models.TestResponseModel;
 import com.example.webshop.repositories.TestRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,17 +18,17 @@ public class TestService {
         this.testRepository = testRepository;
     }
 
-    public List<TestModel> findAll() {
+    public List<TestResponseModel> findAll() {
         return testRepository.findAll()
-                .stream().map(test -> new TestModel(test.getWord()))
+                .stream().map(test -> new TestResponseModel(test.getWord()))
                 .collect(Collectors.toList());
     }
 
-    public Test save(TestModel testModel) {
-        if (testModel.getWord() == null) {
+    public Test save(TestResponseModel testResponseModel) {
+        if (testResponseModel.getWord() == null) {
             throw new ValidationException("missing word");
         }
-        return testRepository.save(new Test(testModel.getWord()));
+        return testRepository.save(new Test(testResponseModel.getWord()));
     }
 
 }

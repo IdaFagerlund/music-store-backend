@@ -1,54 +1,39 @@
 package com.example.webshop.controllers;
 
-import com.example.webshop.entities.Product;
-import com.example.webshop.entities.ProductReview;
-import com.example.webshop.models.ProductModel;
-import com.example.webshop.repositories.ProductRepository;
-import com.example.webshop.repositories.ProductReviewRepository;
+import com.example.webshop.models.ProductRequestModel;
+import com.example.webshop.models.ProductResponseModel;
+import com.example.webshop.models.ProductReviewRequestModel;
+import com.example.webshop.services.ProductService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
 @RequestMapping("/products")
 public class ProductController {
 
-    private final ProductRepository productRepository;
-    private final ProductReviewRepository productReviewRepository;
+    private final ProductService productService;
 
-    public ProductController(ProductRepository productRepository, ProductReviewRepository productReviewRepository) {
-        this.productRepository = productRepository;
-        this.productReviewRepository = productReviewRepository;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
-    @GetMapping("/")
-    public ResponseEntity<?> getTests() {
-        List<Product> products = productRepository.findAll();
-        ProductModel productModel = new ProductModel(products.get(0).getName(), products.get(0).getProductReviews().get(0).getComment());
-        return ResponseEntity.status(200).body(productModel);
+    @GetMapping("/get-all")
+    public ResponseEntity<List<ProductResponseModel>> getProducts() {
+        return ResponseEntity.status(200).body(productService.getAllProducts());
     }
 
-    @GetMapping("/1")
-    public ResponseEntity<List<ProductReview>> getTesasdts() {
-        return ResponseEntity.status(200).body(productReviewRepository.findAll());
+    @PostMapping("/add-product")
+    public ResponseEntity<Void> addProduct(@RequestBody ProductRequestModel product) {
+        productService.addProduct(product);
+        return ResponseEntity.status(200).build();
     }
 
-    @PostMapping("/")
-    public ResponseEntity<String> getTest2s() {
-
-        Product p = new Product();
-        p.setName("name");
-        p.setPrice(10);
-        ProductReview r = new ProductReview("comment1", 1);
-        p.setProductReviews(Arrays.asList(r));
-        r.setProduct(p);
-        productRepository.save(p);
-        return ResponseEntity.ok("");
+    @PostMapping("/add-review")
+    public ResponseEntity<Void> addProductReview(@RequestBody ProductReviewRequestModel productReview) {
+        productService.addProductReview(productReview);
+        return ResponseEntity.status(200).build();
     }
 
 }

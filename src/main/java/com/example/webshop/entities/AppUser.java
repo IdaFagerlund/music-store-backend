@@ -13,6 +13,8 @@ public class AppUser {
     private long id;
     private String username;
     private String password;
+    //@OneToMany(mappedBy = "app_user", cascade = CascadeType.ALL, orphanRemoval = true)
+    //private List<ProductReview> productReviews = new ArrayList<>();
 
     public AppUser() {
     }
@@ -45,4 +47,12 @@ public class AppUser {
     public void setPassword(String password) {
         this.password = password;
     }
+
+//    public List<ProductReview> getProductReviews() {
+//        return productReviews;
+//    }
+//
+//    public void setProductReviews(List<ProductReview> productReviews) {
+//        this.productReviews = productReviews;
+//    }
 }

@@ -1,35 +1,33 @@
-package com.example.webshop.entities;
+package com.example.webshop.models;
 
-import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-public class Product {
+public class ProductResponseModel {
 
-    @Id
-    @GeneratedValue
-    private Integer id;
+    private int id;
     private String name;
     private String description;
     private double price;
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductReview> productReviews;
+    private List<ProductReviewResponseModel> productReviews = new ArrayList<>();
 
-    public Product() {
+    public ProductResponseModel() {
     }
 
-    public Product(String name, String description, double price, List<ProductReview> productReviews) {
+    public ProductResponseModel(int id, String name, String description, double price,
+                                List<ProductReviewResponseModel> productReviews) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.productReviews = productReviews;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -57,12 +55,11 @@ public class Product {
         this.price = price;
     }
 
-    public List<ProductReview> getProductReviews() {
+    public List<ProductReviewResponseModel> getProductReviews() {
         return productReviews;
     }
 
-    public void setProductReviews(List<ProductReview> productReviews) {
+    public void setProductReviews(List<ProductReviewResponseModel> productReviews) {
         this.productReviews = productReviews;
     }
-
 }
