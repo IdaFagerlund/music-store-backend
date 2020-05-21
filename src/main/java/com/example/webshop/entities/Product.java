@@ -15,8 +15,9 @@ public class Product {
     private Integer id;
     private String name;
     private String description;
+    private int averageReviewStars;
     // Don't just delete the product right away because ongoing and completed orders containing this product may still need to
-    // be around for a while longer. At the same time, be able to ignore these products when browsing the current inventory
+    // be around for a while longer. These products will however not be sent to the browse page on the frontend
     private boolean isRemoved;
     @OneToMany(mappedBy = "product", orphanRemoval = true)
     private List<ProductReview> productReviews;
@@ -26,9 +27,10 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, String description, double price) {
+    public Product(String name, String description, int averageReviewStars, double price) {
         this.name = name;
         this.description = description;
+        this.averageReviewStars = averageReviewStars;
         this.isRemoved = false;
         this.productReviews = new ArrayList<>();
         Pricing pricing = new Pricing(price);
@@ -73,6 +75,14 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getAverageReviewStars() {
+        return averageReviewStars;
+    }
+
+    public void setAverageReviewStars(int averageReviewStars) {
+        this.averageReviewStars = averageReviewStars;
     }
 
     public List<Pricing> getPrices() {

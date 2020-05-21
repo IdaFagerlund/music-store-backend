@@ -2,39 +2,32 @@ package com.example.webshop.models;
 
 import com.example.webshop.entities.Product;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class ProductResponseModel {
+public class ProductLightResponseModel {
 
     private int id;
     private String name;
     private String description;
+    private int averageReviewStars;
     private double price;
-    private List<ProductReviewResponseModel> productReviews = new ArrayList<>();
 
-    public ProductResponseModel() {
+    public ProductLightResponseModel() {
     }
 
-    public ProductResponseModel(int id, String name, String description, double price,
-                                List<ProductReviewResponseModel> productReviews) {
+    public ProductLightResponseModel(int id, String name, String description, int averageReviewStars, double price) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.averageReviewStars = averageReviewStars;
         this.price = price;
-        this.productReviews = productReviews;
     }
 
-    public ProductResponseModel(Product product) {
+    public ProductLightResponseModel(Product product) {
         this.id = product.getId();
         this.name = product.getName();
         this.description = product.getDescription();
+        this.averageReviewStars = product.getAverageReviewStars();
         double currentPrice = product.getPrices().get(product.getPrices().size() - 1).getPrice();
         this.price = currentPrice;
-        this.productReviews = product.getProductReviews()
-                .stream().map(ProductReviewResponseModel::new)
-                .collect(Collectors.toList());
     }
 
     public int getId() {
@@ -61,20 +54,20 @@ public class ProductResponseModel {
         this.description = description;
     }
 
+    public int getAverageReviewStars() {
+        return averageReviewStars;
+    }
+
+    public void setAverageReviewStars(int averageReviewStars) {
+        this.averageReviewStars = averageReviewStars;
+    }
+
     public double getPrice() {
         return price;
     }
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public List<ProductReviewResponseModel> getProductReviews() {
-        return productReviews;
-    }
-
-    public void setProductReviews(List<ProductReviewResponseModel> productReviews) {
-        this.productReviews = productReviews;
     }
 
 }

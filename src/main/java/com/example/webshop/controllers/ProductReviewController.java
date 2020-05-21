@@ -6,6 +6,8 @@ import com.example.webshop.services.ProductReviewService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/product-reviews")
 public class ProductReviewController {
@@ -14,6 +16,11 @@ public class ProductReviewController {
 
     public ProductReviewController(ProductReviewService productReviewService) {
         this.productReviewService = productReviewService;
+    }
+
+    @GetMapping("/{productId}")
+    public ResponseEntity<List<ProductReviewResponseModel>> getReviewsForProduct(@PathVariable int productId) {
+        return ResponseEntity.status(200).body(productReviewService.getReviewsForProduct(productId));
     }
 
     @PostMapping("/{productId}")

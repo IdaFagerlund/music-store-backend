@@ -2,9 +2,11 @@ package com.example.webshop.services;
 
 import com.example.webshop.entities.Pricing;
 import com.example.webshop.entities.Product;
+import com.example.webshop.entities.ProductReview;
 import com.example.webshop.exceptions.NotFoundException;
+import com.example.webshop.models.ProductFullResponseModel;
+import com.example.webshop.models.ProductLightResponseModel;
 import com.example.webshop.models.ProductRequestModel;
-import com.example.webshop.models.ProductResponseModel;
 import com.example.webshop.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,30 +22,52 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<ProductResponseModel> getAllProducts() {
+    public List<ProductLightResponseModel> getAllProductsLightResponse() {
         return productRepository.findAll().stream()
                 .filter(product -> !product.isRemoved())
-                .map(ProductResponseModel::new)
+                .map(ProductLightResponseModel::new)
                 .collect(Collectors.toList());
     }
 
-    public ProductResponseModel addProduct(ProductRequestModel newProduct) {
-        return new ProductResponseModel(productRepository.save(new Product(newProduct)));
+    public List<ProductFullResponseModel> getAllProductsFullResponse() {
+        return productRepository.findAll().stream()
+                .filter(product -> !product.isRemoved())
+                .map(ProductFullResponseModel::new)
+                .collect(Collectors.toList());
     }
 
-    public ProductResponseModel patchProduct(int id, ProductRequestModel updatedProduct) {
+    public ProductFullResponseModel addProduct(ProductRequestModel newProduct) {
+        return new ProductFullResponseModel(productRepository.save(new Product(newProduct)));
+    }
+
+    public ProductFullResponseModel patchProduct(int id, ProductRequestModel updatedProduct) {
         Product product = findProductById(id);
 
         product.setName(updatedProduct.getName());
         product.setDescription(updatedProduct.getDescription());
         product.addPricing(new Pricing(updatedProduct.getPrice()));
 
-        return new ProductResponseModel(productRepository.save(product));
+        return new ProductFullResponseModel(productRepository.save(product));
     }
 
     public void markAsRemoved(int id) {
         Product product = findProductById(id);
         product.setRemoved(true);
+        productRepository.save(product);
+    }
+
+    public void deleteProduct(int id) {
+        productRepository.delete(findProductById(id));
+    }
+
+    protected void updateAverageReviewStars(int productId) {
+        Product product = findProductById(productId);
+        double newAverageReviewStars = product.getProductReviews()
+                .stream().map(ProductReview::getStars)
+                .mapToInt(x -> x)
+                .summaryStatistics()
+                .getAverage();
+        product.setAverageReviewStars((int) Math.round(newAverageReviewStars));
         productRepository.save(product);
     }
 
