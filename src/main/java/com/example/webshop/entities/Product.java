@@ -18,7 +18,8 @@ public class Product {
     private String name;
     private String description;
     private double price;
-    @OneToMany(mappedBy = "product", orphanRemoval = true)
+    private boolean isRemoved;
+    @OneToMany(mappedBy = "product")
     private List<ProductReview> productReviews;
 
     public Product() {
@@ -28,6 +29,7 @@ public class Product {
         this.name = name;
         this.description = description;
         this.price = price;
+        this.isRemoved = false;
         this.productReviews = new ArrayList<>();
     }
 
@@ -35,6 +37,7 @@ public class Product {
         this.name = productModel.getName();
         this.description = productModel.getDescription();
         this.price = productModel.getPrice();
+        this.isRemoved = false;
         this.productReviews = new ArrayList<>();
     }
 
@@ -76,6 +79,14 @@ public class Product {
 
     public void setProductReviews(List<ProductReview> productReviews) {
         this.productReviews = productReviews;
+    }
+
+    public boolean isRemoved() {
+        return isRemoved;
+    }
+
+    public void setRemoved(boolean removed) {
+        isRemoved = removed;
     }
 
 }

@@ -17,14 +17,17 @@ public class AppUser {
     private String password;
     @OneToMany(mappedBy = "appUser", orphanRemoval = true)
     private List<ProductReview> productReviews;
+//    @OneToMany(mappedBy = "appUser", orphanRemoval = true)
+//    private List<Order> orders;
 
     public AppUser() {
     }
 
-    public AppUser(String username, String password, List<ProductReview> productReviews) {
+    public AppUser(String username, String password) {
         this.username = username;
         this.password = password;
         this.productReviews = new ArrayList<>();
+        //this.orders = new ArrayList<>();
     }
 
     public Integer getId() {
@@ -58,4 +61,13 @@ public class AppUser {
     public void setProductReviews(List<ProductReview> productReviews) {
         this.productReviews = productReviews;
     }
+
+//    public List<Order> getOrders() {
+//        return orders;
+//    }
+//
+//    public void setOrders(List<Order> orders) {
+//        this.orders = orders;
+//    }
+
 }

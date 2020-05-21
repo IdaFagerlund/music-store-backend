@@ -20,7 +20,10 @@ public class ProductService {
     }
 
     public List<ProductResponseModel> getAllProducts() {
-        return productRepository.findAll().stream().map(ProductResponseModel::new).collect(Collectors.toList());
+        return productRepository.findAll().stream()
+                .filter(product -> !product.isRemoved())
+                .map(ProductResponseModel::new)
+                .collect(Collectors.toList());
     }
 
     public ProductResponseModel addProduct(ProductRequestModel newProduct) {
@@ -37,8 +40,10 @@ public class ProductService {
         return new ProductResponseModel(productRepository.save(product));
     }
 
-    public void deleteProduct(int id) {
-        productRepository.delete(findProductById(id));
+    public void removeProduct(int id) {
+        Product product = findProductById(id);
+        product.setRemoved(true);
+        productRepository.save(product);
     }
 
     protected Product findProductById(int id) {
