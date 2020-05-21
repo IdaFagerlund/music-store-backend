@@ -3,6 +3,7 @@ package com.example.webshop.entities;
 import com.example.webshop.models.ProductReviewRequestModel;
 
 import javax.persistence.*;
+import java.time.Instant;
 
 @Entity
 public class ProductReview {
@@ -12,6 +13,8 @@ public class ProductReview {
     private Integer id;
     private String comment;
     private int stars;
+    private Instant timeCreatedUTC;
+    private Instant lastTimeUpdatedUTC;
     @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -23,11 +26,13 @@ public class ProductReview {
     public ProductReview(String comment, int stars) {
         this.comment = comment;
         this.stars = stars;
+        this.timeCreatedUTC = Instant.now();
     }
 
     public ProductReview(ProductReviewRequestModel productReviewModel) {
         this.comment = productReviewModel.getComment();
         this.stars = productReviewModel.getStars();
+        this.timeCreatedUTC = Instant.now();
     }
 
     public Integer getId() {
@@ -70,4 +75,27 @@ public class ProductReview {
         this.appUser = appUser;
     }
 
+    public Instant getTimeCreatedUTC() {
+        return timeCreatedUTC;
+    }
+
+    public void setTimeCreatedUTC(Instant timeCreatedUTC) {
+        this.timeCreatedUTC = timeCreatedUTC;
+    }
+
+    public Instant getLastTimeUpdatedUTC() {
+        return lastTimeUpdatedUTC;
+    }
+
+    public void setLastTimeUpdatedUTC(Instant lastTimeUpdatedUTC) {
+        this.lastTimeUpdatedUTC = lastTimeUpdatedUTC;
+    }
+
+    public AppUser getAppUser() {
+        return appUser;
+    }
+
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
 }

@@ -12,6 +12,8 @@ import com.example.webshop.repositories.ProductReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+
 @Service
 public class ProductReviewService {
 
@@ -48,6 +50,7 @@ public class ProductReviewService {
 
         productReview.setComment(updatedProductReview.getComment());
         productReview.setStars(updatedProductReview.getStars());
+        productReview.setLastTimeUpdatedUTC(Instant.now());
 
         return new ProductReviewResponseModel(productReviewRepository.save(productReview));
     }

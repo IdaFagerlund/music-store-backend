@@ -1,12 +1,13 @@
 package com.example.webshop.entities;
 
 import javax.persistence.*;
+import java.time.Instant;
 
 /**
  * Keep track of the pricing history for a product because what if:
  * 1. Someone buys a product with a specific price at a given time.
  * 2. The product price change a while after, for example goes on a sale.
- * 3. That someone now wants to return the product and they should get the same amount of money back they bought it for.
+ * 3. That someone decides to return the product and they should get the same amount of money back they bought it for.
  */
 @Entity
 public class Pricing {
@@ -14,7 +15,7 @@ public class Pricing {
     @Id
     @GeneratedValue
     private Integer id;
-    private String timeUTC;
+    private Instant timeUTC;
     private double price;
     @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
@@ -23,7 +24,7 @@ public class Pricing {
     }
 
     public Pricing(double price) {
-        this.timeUTC = "implement utc time";
+        this.timeUTC = Instant.now();
         this.price = price;
     }
 
@@ -43,11 +44,11 @@ public class Pricing {
         this.id = id;
     }
 
-    public String getTimeUTC() {
+    public Instant getTimeUTC() {
         return timeUTC;
     }
 
-    public void setTimeUTC(String timeUTC) {
+    public void setTimeUTC(Instant timeUTC) {
         this.timeUTC = timeUTC;
     }
 
