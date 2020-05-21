@@ -12,8 +12,8 @@ public class ProductReview {
     private int stars;
     @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
-    //@ManyToOne(fetch = FetchType.LAZY)
-    //private AppUser user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private AppUser appUser;
 
     public ProductReview() {
     }
@@ -23,11 +23,11 @@ public class ProductReview {
         this.stars = stars;
     }
 
-    public ProductReview(String comment, int stars, Product product/*, AppUser user*/) {
+    public ProductReview(String comment, int stars, Product product, AppUser appUser) {
         this.comment = comment;
         this.stars = stars;
         this.product = product;
-        //this.user = user;
+        this.appUser = appUser;
     }
 
     public Integer getId() {
@@ -62,12 +62,12 @@ public class ProductReview {
         this.product = product;
     }
 
-//    public AppUser getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(AppUser user) {
-//        this.user = user;
-//    }
+    public AppUser getUser() {
+        return appUser;
+    }
+
+    public void setUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
 
 }

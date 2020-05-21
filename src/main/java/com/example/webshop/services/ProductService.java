@@ -1,11 +1,8 @@
 package com.example.webshop.services;
 
 import com.example.webshop.entities.Product;
-import com.example.webshop.entities.ProductReview;
-import com.example.webshop.exceptions.NotFoundException;
 import com.example.webshop.models.ProductRequestModel;
 import com.example.webshop.models.ProductResponseModel;
-import com.example.webshop.models.ProductReviewRequestModel;
 import com.example.webshop.models.ProductReviewResponseModel;
 import com.example.webshop.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -27,21 +24,20 @@ public class ProductService {
         return productRepository.findAll()
                 .stream().map(product -> {
                     List<ProductReviewResponseModel> productReviewModels = product.getProductReviews()
-                            .stream().map(productReviewModel ->
+                            .stream().map(productReview ->
                                     new ProductReviewResponseModel(
-                                            productReviewModel.getComment(),
-                                            productReviewModel.getStars(),
-                                            "fake username"
+                                            productReview.getComment(),
+                                            productReview.getStars(),
+                                            productReview.getUser().getUsername()
                                     )
                             ).collect(Collectors.toList());
-                    ProductResponseModel productModel = new ProductResponseModel(
+                    return new ProductResponseModel(
                             product.getId(),
                             product.getName(),
                             product.getDescription(),
                             product.getPrice(),
                             productReviewModels
                     );
-                    return productModel;
                 }).collect(Collectors.toList());
 
     }
@@ -53,18 +49,6 @@ public class ProductService {
                 product.getPrice(),
                 new ArrayList<>()
         ));
-    }
-
-    public void addProductReview(ProductReviewRequestModel productReviewModel) {
-        Product product = productRepository.findById(productReviewModel.getProductId())
-                .orElseThrow(() -> new NotFoundException("Invalid product id"));
-
-        ProductReview productReview = new ProductReview(productReviewModel.getComment(), productReviewModel.getStars());
-
-        productReview.setProduct(product);
-        product.getProductReviews().add(productReview);
-
-        productRepository.save(product);
     }
 
 }

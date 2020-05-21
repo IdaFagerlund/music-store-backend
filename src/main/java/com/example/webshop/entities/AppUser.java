@@ -1,34 +1,34 @@
 package com.example.webshop.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class AppUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue
+    private Integer id;
     private String username;
     private String password;
-    //@OneToMany(mappedBy = "app_user", cascade = CascadeType.ALL, orphanRemoval = true)
-    //private List<ProductReview> productReviews = new ArrayList<>();
+    @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductReview> productReviews;
 
     public AppUser() {
     }
 
-    public AppUser(String username, String password) {
+    public AppUser(String username, String password, List<ProductReview> productReviews) {
         this.username = username;
         this.password = password;
+        this.productReviews = new ArrayList<>();
     }
 
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -48,11 +48,11 @@ public class AppUser {
         this.password = password;
     }
 
-//    public List<ProductReview> getProductReviews() {
-//        return productReviews;
-//    }
-//
-//    public void setProductReviews(List<ProductReview> productReviews) {
-//        this.productReviews = productReviews;
-//    }
+    public List<ProductReview> getProductReviews() {
+        return productReviews;
+    }
+
+    public void setProductReviews(List<ProductReview> productReviews) {
+        this.productReviews = productReviews;
+    }
 }
