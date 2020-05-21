@@ -22,32 +22,37 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
+    public static double getPriceAtOrderTime(Product product) {
+        return product.getPrices().get(product.getPrices().size() - 1).getPrice(); //TODO
+    }
+
     public List<ProductLightResponseModel> getAllProductsLightResponse() {
         return productRepository.findAll().stream()
                 .filter(product -> !product.isRemoved())
-                .map(ProductLightResponseModel::new)
+                .map(product -> new ProductLightResponseModel(product, getCurrentProductPrice(product)))
                 .collect(Collectors.toList());
     }
 
     public List<ProductFullResponseModel> getAllProductsFullResponse() {
         return productRepository.findAll().stream()
                 .filter(product -> !product.isRemoved())
-                .map(ProductFullResponseModel::new)
+                .map(product -> new ProductFullResponseModel(product, getCurrentProductPrice(product)))
                 .collect(Collectors.toList());
     }
 
-    public ProductFullResponseModel addProduct(ProductRequestModel newProduct) {
-        return new ProductFullResponseModel(productRepository.save(new Product(newProduct)));
+    public ProductLightResponseModel addProduct(ProductRequestModel newProduct) {
+        Product savedProduct = productRepository.save(new Product(newProduct));
+        return new ProductLightResponseModel(savedProduct, getCurrentProductPrice(savedProduct));
     }
 
-    public ProductFullResponseModel patchProduct(int id, ProductRequestModel updatedProduct) {
+    public ProductLightResponseModel patchProduct(int id, ProductRequestModel updatedProduct) {
         Product product = findProductById(id);
 
         product.setName(updatedProduct.getName());
         product.setDescription(updatedProduct.getDescription());
         product.addPricing(new Pricing(updatedProduct.getPrice()));
 
-        return new ProductFullResponseModel(productRepository.save(product));
+        return new ProductLightResponseModel(productRepository.save(product), getCurrentProductPrice(product));
     }
 
     public void markAsRemoved(int id) {
@@ -74,6 +79,10 @@ public class ProductService {
     protected Product findProductById(int id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Can not update an unexisting product"));
+    }
+
+    protected double getCurrentProductPrice(Product product) {
+        return product.getPrices().get(product.getPrices().size() - 1).getPrice();
     }
 
 }

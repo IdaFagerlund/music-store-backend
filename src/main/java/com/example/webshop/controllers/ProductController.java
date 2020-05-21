@@ -31,13 +31,13 @@ public class ProductController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<ProductFullResponseModel> addProduct(@RequestBody ProductRequestModel productModel) {
+    public ResponseEntity<ProductLightResponseModel> addProduct(@RequestBody ProductRequestModel productModel) {
         return ResponseEntity.status(201).body(productService.addProduct(productModel));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ProductFullResponseModel> patchProduct(@PathVariable int id,
-                                                                 @RequestBody ProductRequestModel productModel) {
+    public ResponseEntity<ProductLightResponseModel> patchProduct(@PathVariable int id,
+                                                                  @RequestBody ProductRequestModel productModel) {
         return ResponseEntity.status(200).body(productService.patchProduct(id, productModel));
     }
 

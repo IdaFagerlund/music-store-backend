@@ -10,64 +10,32 @@ public class ProductLightResponseModel {
     private int averageReviewStars;
     private double price;
 
-    public ProductLightResponseModel() {
-    }
-
-    public ProductLightResponseModel(int id, String name, String description, int averageReviewStars, double price) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.averageReviewStars = averageReviewStars;
-        this.price = price;
-    }
-
-    public ProductLightResponseModel(Product product) {
+    public ProductLightResponseModel(Product product, double price) {
         this.id = product.getId();
         this.name = product.getName();
         this.description = product.getDescription();
         this.averageReviewStars = product.getAverageReviewStars();
-        double currentPrice = product.getPrices().get(product.getPrices().size() - 1).getPrice();
-        this.price = currentPrice;
+        this.price = price;
     }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public int getAverageReviewStars() {
         return averageReviewStars;
     }
 
-    public void setAverageReviewStars(int averageReviewStars) {
-        this.averageReviewStars = averageReviewStars;
-    }
-
     public double getPrice() {
         return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 
 }

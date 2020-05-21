@@ -2,11 +2,8 @@ package com.example.webshop.models;
 
 public class ProductReviewRequestModel {
 
-    private String comment;
-    private int stars;
-
-    public ProductReviewRequestModel() {
-    }
+    private final String comment;
+    private final int stars;
 
     public ProductReviewRequestModel(String comment, int stars) {
         this.comment = comment;
@@ -17,16 +14,8 @@ public class ProductReviewRequestModel {
         return comment;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
     public int getStars() {
         return stars;
-    }
-
-    public void setStars(int stars) {
-        this.stars = stars;
     }
 
 }

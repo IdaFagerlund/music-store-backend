@@ -3,13 +3,13 @@ package com.example.webshop.services;
 import com.example.webshop.entities.AppUser;
 import com.example.webshop.entities.Product;
 import com.example.webshop.entities.ProductReview;
-import com.example.webshop.exceptions.NotFoundException;
 import com.example.webshop.models.ProductReviewRequestModel;
 import com.example.webshop.models.ProductReviewResponseModel;
 import com.example.webshop.repositories.AppUserRepository;
 import com.example.webshop.repositories.ProductReviewRepository;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,9 +34,10 @@ public class ProductReviewService {
                 .collect(Collectors.toList());
     }
 
-    public ProductReviewResponseModel addProductReview(int productId, ProductReviewRequestModel productReviewModel) {
+    public ProductReviewResponseModel addProductReview(int productId, ProductReviewRequestModel productReviewModel,
+                                                       Principal principal) {
         Product product = productService.findProductById(productId);
-        AppUser appUser = GETUSER_REMOVEWHENSECURITYISDONE();
+        AppUser appUser = appUserRepository.findByUsername(principal.getName());
 
         ProductReview productReview = new ProductReview(productReviewModel);
         productReview.setProduct(product);
@@ -74,11 +75,6 @@ public class ProductReviewService {
 
         productReviewRepository.delete(productReview);
         productService.updateAverageReviewStars(productId);
-    }
-
-    private AppUser GETUSER_REMOVEWHENSECURITYISDONE() { //TODO: hhheeere. use the principal from security
-        return appUserRepository.findById(1)
-                .orElseThrow(() -> new NotFoundException("Invalid user"));
     }
 
 }

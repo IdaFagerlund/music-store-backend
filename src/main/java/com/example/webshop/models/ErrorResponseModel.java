@@ -2,10 +2,7 @@ package com.example.webshop.models;
 
 public class ErrorResponseModel {
 
-    private String error;
-
-    public ErrorResponseModel() {
-    }
+    private final String error;
 
     public ErrorResponseModel(String error) {
         this.error = error;
@@ -15,7 +12,4 @@ public class ErrorResponseModel {
         return error;
     }
 
-    public void setError(String error) {
-        this.error = error;
-    }
 }
