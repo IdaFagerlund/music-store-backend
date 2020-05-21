@@ -26,7 +26,7 @@ public class ProductReviewController {
     @PostMapping("/{productId}")
     public ResponseEntity<ProductReviewResponseModel> addProductReview(@PathVariable int productId,
                                                                        @RequestBody ProductReviewRequestModel productReviewModel) {
-        return ResponseEntity.status(200).body(productReviewService.addProductReview(productId, productReviewModel));
+        return ResponseEntity.status(201).body(productReviewService.addProductReview(productId, productReviewModel));
     }
 
     @PatchMapping("/{productId}")

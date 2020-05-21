@@ -1,0 +1,58 @@
+package com.example.webshop.entities;
+
+import javax.persistence.*;
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+public class ProductOrder {
+
+    @Id
+    @GeneratedValue
+    private Integer id;
+    private Instant timeCreatedUTC;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private AppUser appUser;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "product_order_product",
+            joinColumns = @JoinColumn(name = "product_order_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private Set<Product> products = new HashSet<>();
+
+    public ProductOrder() {
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Instant getTimeCreatedUTC() {
+        return timeCreatedUTC;
+    }
+
+    public void setTimeCreatedUTC(Instant timeCreatedUTC) {
+        this.timeCreatedUTC = timeCreatedUTC;
+    }
+
+    public AppUser getAppUser() {
+        return appUser;
+    }
+
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
+    }
+}

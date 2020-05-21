@@ -3,9 +3,7 @@ package com.example.webshop.entities;
 import com.example.webshop.models.ProductRequestModel;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Product {
@@ -23,6 +21,8 @@ public class Product {
     private List<ProductReview> productReviews;
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Pricing> prices;
+    @ManyToMany(mappedBy = "products")
+    private Set<ProductOrder> productOrders = new HashSet<>();
 
     public Product() {
     }
@@ -109,4 +109,11 @@ public class Product {
         isRemoved = removed;
     }
 
+    public Set<ProductOrder> getProductOrders() {
+        return productOrders;
+    }
+
+    public void setProductOrders(Set<ProductOrder> productOrders) {
+        this.productOrders = productOrders;
+    }
 }
