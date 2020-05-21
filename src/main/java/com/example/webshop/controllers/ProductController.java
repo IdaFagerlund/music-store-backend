@@ -34,9 +34,9 @@ public class ProductController {
         return ResponseEntity.status(200).body(productService.patchProduct(id, productModel));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeProduct(@PathVariable int id) {
-        productService.removeProduct(id);
+    @PatchMapping("/mark-as-removed/{id}")
+    public ResponseEntity<Void> markProductAsRemoved(@PathVariable int id) {
+        productService.markAsRemoved(id);
         return ResponseEntity.status(200).build();
     }
 

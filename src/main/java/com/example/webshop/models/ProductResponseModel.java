@@ -30,7 +30,8 @@ public class ProductResponseModel {
         this.id = product.getId();
         this.name = product.getName();
         this.description = product.getDescription();
-        this.price = product.getPrice();
+        double currentPrice = product.getPrices().get(product.getPrices().size() - 1).getPrice();
+        this.price = currentPrice;
         this.productReviews = product.getProductReviews()
                 .stream().map(ProductReviewResponseModel::new)
                 .collect(Collectors.toList());

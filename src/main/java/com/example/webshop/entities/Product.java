@@ -2,11 +2,9 @@ package com.example.webshop.entities;
 
 import com.example.webshop.models.ProductRequestModel;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -17,10 +15,13 @@ public class Product {
     private Integer id;
     private String name;
     private String description;
-    private double price;
+    // Don't just delete the product right away because ongoing and completed orders containing this product may still need to
+    // be around for a while longer. At the same time, be able to ignore these products when browsing the current inventory
     private boolean isRemoved;
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", orphanRemoval = true)
     private List<ProductReview> productReviews;
+    @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Pricing> prices;
 
     public Product() {
     }
@@ -28,17 +29,26 @@ public class Product {
     public Product(String name, String description, double price) {
         this.name = name;
         this.description = description;
-        this.price = price;
         this.isRemoved = false;
         this.productReviews = new ArrayList<>();
+        Pricing pricing = new Pricing(price);
+        pricing.setProduct(this);
+        this.prices = Arrays.asList(pricing);
     }
 
     public Product(ProductRequestModel productModel) {
         this.name = productModel.getName();
         this.description = productModel.getDescription();
-        this.price = productModel.getPrice();
         this.isRemoved = false;
         this.productReviews = new ArrayList<>();
+        Pricing pricing = new Pricing(productModel.getPrice());
+        pricing.setProduct(this);
+        this.prices = Arrays.asList(pricing);
+    }
+
+    public void addPricing(Pricing newPricing) {
+        prices.add(newPricing);
+        newPricing.setProduct(this);
     }
 
     public Integer getId() {
@@ -65,12 +75,12 @@ public class Product {
         this.description = description;
     }
 
-    public double getPrice() {
-        return price;
+    public List<Pricing> getPrices() {
+        return prices;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setPrices(List<Pricing> prices) {
+        this.prices = prices;
     }
 
     public List<ProductReview> getProductReviews() {

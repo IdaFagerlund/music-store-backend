@@ -1,5 +1,6 @@
 package com.example.webshop.services;
 
+import com.example.webshop.entities.Pricing;
 import com.example.webshop.entities.Product;
 import com.example.webshop.exceptions.NotFoundException;
 import com.example.webshop.models.ProductRequestModel;
@@ -35,12 +36,12 @@ public class ProductService {
 
         product.setName(updatedProduct.getName());
         product.setDescription(updatedProduct.getDescription());
-        product.setPrice(updatedProduct.getPrice());
+        product.addPricing(new Pricing(updatedProduct.getPrice()));
 
         return new ProductResponseModel(productRepository.save(product));
     }
 
-    public void removeProduct(int id) {
+    public void markAsRemoved(int id) {
         Product product = findProductById(id);
         product.setRemoved(true);
         productRepository.save(product);
