@@ -18,16 +18,26 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/all")
+    @GetMapping("/")
     public ResponseEntity<List<ProductResponseModel>> getProducts() {
         return ResponseEntity.status(200).body(productService.getAllProducts());
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<Void> addProduct(@RequestBody ProductRequestModel product) {
-        productService.addProduct(product);
-        return ResponseEntity.status(200).build();
+    @PostMapping("/")
+    public ResponseEntity<ProductResponseModel> addProduct(@RequestBody ProductRequestModel productModel) {
+        return ResponseEntity.status(201).body(productService.addProduct(productModel));
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<ProductResponseModel> patchProduct(@PathVariable int id,
+                                                             @RequestBody ProductRequestModel productModel) {
+        return ResponseEntity.status(200).body(productService.patchProduct(id, productModel));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable int id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.status(200).build();
+    }
 
 }

@@ -1,6 +1,12 @@
 package com.example.webshop.entities;
 
-import javax.persistence.*;
+import com.example.webshop.models.ProductRequestModel;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,17 +18,24 @@ public class Product {
     private String name;
     private String description;
     private double price;
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "product", orphanRemoval = true)
     private List<ProductReview> productReviews;
 
     public Product() {
     }
 
-    public Product(String name, String description, double price, List<ProductReview> productReviews) {
+    public Product(String name, String description, double price) {
         this.name = name;
         this.description = description;
         this.price = price;
-        this.productReviews = productReviews;
+        this.productReviews = new ArrayList<>();
+    }
+
+    public Product(ProductRequestModel productModel) {
+        this.name = productModel.getName();
+        this.description = productModel.getDescription();
+        this.price = productModel.getPrice();
+        this.productReviews = new ArrayList<>();
     }
 
     public Integer getId() {

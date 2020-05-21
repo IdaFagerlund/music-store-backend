@@ -1,6 +1,9 @@
 package com.example.webshop.entities;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +15,7 @@ public class AppUser {
     private Integer id;
     private String username;
     private String password;
-    @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "appUser", orphanRemoval = true)
     private List<ProductReview> productReviews;
 
     public AppUser() {

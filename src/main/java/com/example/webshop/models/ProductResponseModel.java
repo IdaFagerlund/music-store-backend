@@ -1,7 +1,10 @@
 package com.example.webshop.models;
 
+import com.example.webshop.entities.Product;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProductResponseModel {
 
@@ -21,6 +24,16 @@ public class ProductResponseModel {
         this.description = description;
         this.price = price;
         this.productReviews = productReviews;
+    }
+
+    public ProductResponseModel(Product product) {
+        this.id = product.getId();
+        this.name = product.getName();
+        this.description = product.getDescription();
+        this.price = product.getPrice();
+        this.productReviews = product.getProductReviews()
+                .stream().map(ProductReviewResponseModel::new)
+                .collect(Collectors.toList());
     }
 
     public int getId() {
@@ -62,4 +75,5 @@ public class ProductResponseModel {
     public void setProductReviews(List<ProductReviewResponseModel> productReviews) {
         this.productReviews = productReviews;
     }
+
 }

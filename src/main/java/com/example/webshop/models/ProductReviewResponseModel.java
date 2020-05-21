@@ -1,5 +1,7 @@
 package com.example.webshop.models;
 
+import com.example.webshop.entities.ProductReview;
+
 public class ProductReviewResponseModel {
 
     private String comment;
@@ -13,6 +15,12 @@ public class ProductReviewResponseModel {
         this.comment = comment;
         this.stars = stars;
         this.username = username;
+    }
+
+    public ProductReviewResponseModel(ProductReview productReview) {
+        this.comment = productReview.getComment();
+        this.stars = productReview.getStars();
+        this.username = productReview.getUser().getUsername();
     }
 
     public String getComment() {

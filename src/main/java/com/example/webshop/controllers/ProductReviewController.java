@@ -1,15 +1,13 @@
 package com.example.webshop.controllers;
 
 import com.example.webshop.models.ProductReviewRequestModel;
+import com.example.webshop.models.ProductReviewResponseModel;
 import com.example.webshop.services.ProductReviewService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/product-review")
+@RequestMapping("/product-reviews")
 public class ProductReviewController {
 
     private final ProductReviewService productReviewService;
@@ -18,9 +16,21 @@ public class ProductReviewController {
         this.productReviewService = productReviewService;
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<Void> addProductReview(@RequestBody ProductReviewRequestModel productReview) {
-        productReviewService.addProductReview(productReview);
+    @PostMapping("/{productId}")
+    public ResponseEntity<ProductReviewResponseModel> addProductReview(@PathVariable int productId,
+                                                                       @RequestBody ProductReviewRequestModel productReviewModel) {
+        return ResponseEntity.status(200).body(productReviewService.addProductReview(productId, productReviewModel));
+    }
+
+    @PatchMapping("/{productId}")
+    public ResponseEntity<ProductReviewResponseModel> patchProductReview(
+            @PathVariable int productId, @RequestBody ProductReviewRequestModel productReviewModel) {
+        return ResponseEntity.status(200).body(productReviewService.patchProductReview(productId, productReviewModel));
+    }
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> deleteProductReview(@PathVariable int productId) {
+        productReviewService.deleteProductReview(productId);
         return ResponseEntity.status(200).build();
     }
 

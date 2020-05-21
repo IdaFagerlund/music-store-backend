@@ -1,5 +1,7 @@
 package com.example.webshop.entities;
 
+import com.example.webshop.models.ProductReviewRequestModel;
+
 import javax.persistence.*;
 
 @Entity
@@ -23,11 +25,9 @@ public class ProductReview {
         this.stars = stars;
     }
 
-    public ProductReview(String comment, int stars, Product product, AppUser appUser) {
-        this.comment = comment;
-        this.stars = stars;
-        this.product = product;
-        this.appUser = appUser;
+    public ProductReview(ProductReviewRequestModel productReviewModel) {
+        this.comment = productReviewModel.getComment();
+        this.stars = productReviewModel.getStars();
     }
 
     public Integer getId() {

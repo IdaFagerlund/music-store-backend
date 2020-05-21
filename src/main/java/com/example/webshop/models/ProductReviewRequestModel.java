@@ -2,25 +2,15 @@ package com.example.webshop.models;
 
 public class ProductReviewRequestModel {
 
-    private int productId;
     private String comment;
     private int stars;
 
     public ProductReviewRequestModel() {
     }
 
-    public ProductReviewRequestModel(int productId, String comment, int stars) {
-        this.productId = productId;
+    public ProductReviewRequestModel(String comment, int stars) {
         this.comment = comment;
         this.stars = stars;
-    }
-
-    public int getProductId() {
-        return productId;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
     }
 
     public String getComment() {
