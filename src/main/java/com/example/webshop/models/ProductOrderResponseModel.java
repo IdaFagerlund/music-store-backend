@@ -2,18 +2,19 @@ package com.example.webshop.models;
 
 import com.example.webshop.entities.ProductOrder;
 import com.example.webshop.services.ProductService;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor @Getter @Setter
 public class ProductOrderResponseModel {
 
     private Instant timeCreatedUTC;
     private List<ProductLightResponseModel> products;
-
-    public ProductOrderResponseModel() {
-    }
 
     public ProductOrderResponseModel(ProductOrder productOrder) {
         this.timeCreatedUTC = productOrder.getTimeCreatedUTC();
@@ -23,22 +24,6 @@ public class ProductOrderResponseModel {
                         ProductService.getPriceAtOrderTime(product, productOrder))
                 )
                 .collect(Collectors.toList());
-    }
-
-    public Instant getTimeCreatedUTC() {
-        return timeCreatedUTC;
-    }
-
-    public void setTimeCreatedUTC(Instant timeCreatedUTC) {
-        this.timeCreatedUTC = timeCreatedUTC;
-    }
-
-    public List<ProductLightResponseModel> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<ProductLightResponseModel> products) {
-        this.products = products;
     }
 
 }

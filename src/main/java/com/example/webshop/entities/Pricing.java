@@ -1,5 +1,9 @@
 package com.example.webshop.entities;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.time.Instant;
 
@@ -10,6 +14,7 @@ import java.time.Instant;
  * 3. That someone decides to return the product and they should get the same amount of money back they bought it for.
  */
 @Entity
+@NoArgsConstructor @Getter @Setter
 public class Pricing {
 
     @Id
@@ -20,44 +25,9 @@ public class Pricing {
     @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
 
-    public Pricing() {
-    }
-
     public Pricing(double price) {
         this.timeAtPricingUTC = Instant.now();
         this.price = price;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Instant getTimeAtPricingUTC() {
-        return timeAtPricingUTC;
-    }
-
-    public void setTimeAtPricingUTC(Instant timeAtPricingUTC) {
-        this.timeAtPricingUTC = timeAtPricingUTC;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
     }
 
 }

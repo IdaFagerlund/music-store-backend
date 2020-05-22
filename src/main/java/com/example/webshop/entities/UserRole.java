@@ -1,11 +1,15 @@
 package com.example.webshop.entities;
 
 import com.example.webshop.security.UserRoleEnum;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@NoArgsConstructor @Getter @Setter
 public class UserRole {
 
     @Id
@@ -15,32 +19,5 @@ public class UserRole {
     private UserRoleEnum userRole;
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<AppUser> appUsers;
-
-    public UserRole() {
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public UserRoleEnum getUserRole() {
-        return userRole;
-    }
-
-    public void setUserRole(UserRoleEnum userRole) {
-        this.userRole = userRole;
-    }
-
-    public Set<AppUser> getAppUsers() {
-        return appUsers;
-    }
-
-    public void setAppUsers(Set<AppUser> appUsers) {
-        this.appUsers = appUsers;
-    }
 
 }

@@ -1,11 +1,15 @@
 package com.example.webshop.entities;
 
 import com.example.webshop.models.ProductReviewRequestModel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
+@NoArgsConstructor @Getter @Setter
 public class ProductReview {
 
     @Id
@@ -20,69 +24,10 @@ public class ProductReview {
     @ManyToOne(fetch = FetchType.LAZY)
     private AppUser appUser;
 
-    public ProductReview() {
-    }
-
     public ProductReview(ProductReviewRequestModel productReviewModel) {
         this.comment = productReviewModel.getComment();
         this.stars = productReviewModel.getStars();
         this.timeCreatedUTC = Instant.now();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public int getStars() {
-        return stars;
-    }
-
-    public void setStars(int stars) {
-        this.stars = stars;
-    }
-
-    public Instant getTimeCreatedUTC() {
-        return timeCreatedUTC;
-    }
-
-    public void setTimeCreatedUTC(Instant timeCreatedUTC) {
-        this.timeCreatedUTC = timeCreatedUTC;
-    }
-
-    public Instant getLastTimeUpdatedUTC() {
-        return lastTimeUpdatedUTC;
-    }
-
-    public void setLastTimeUpdatedUTC(Instant lastTimeUpdatedUTC) {
-        this.lastTimeUpdatedUTC = lastTimeUpdatedUTC;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public AppUser getAppUser() {
-        return appUser;
-    }
-
-    public void setAppUser(AppUser appUser) {
-        this.appUser = appUser;
     }
 
 }

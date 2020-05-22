@@ -1,10 +1,15 @@
 package com.example.webshop.entities;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.Set;
 
 @Entity
+@NoArgsConstructor @Getter @Setter
 public class ProductOrder {
 
     @Id
@@ -20,44 +25,9 @@ public class ProductOrder {
     )
     private Set<Product> products;
 
-    public ProductOrder() {
-    }
-
     public ProductOrder(Set<Product> products, AppUser appUser) {
         this.timeCreatedUTC = Instant.now();
         this.appUser = appUser;
-        this.products = products;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Instant getTimeCreatedUTC() {
-        return timeCreatedUTC;
-    }
-
-    public void setTimeCreatedUTC(Instant timeCreatedUTC) {
-        this.timeCreatedUTC = timeCreatedUTC;
-    }
-
-    public AppUser getAppUser() {
-        return appUser;
-    }
-
-    public void setAppUser(AppUser appUser) {
-        this.appUser = appUser;
-    }
-
-    public Set<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(Set<Product> products) {
         this.products = products;
     }
 
