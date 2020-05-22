@@ -28,13 +28,18 @@ public class ProductReviewController {
     public ResponseEntity<ProductReviewResponseModel> addProductReview(@PathVariable int productId,
                                                                        @RequestBody ProductReviewRequestModel productReviewModel,
                                                                        Principal principal) {
-        return ResponseEntity.status(201).body(productReviewService.addProductReview(productId, productReviewModel, principal));
+        return ResponseEntity
+                .status(201)
+                .body(productReviewService.addProductReview(productId, productReviewModel, principal));
     }
 
     @PatchMapping("/{productId}")
-    public ResponseEntity<ProductReviewResponseModel> patchProductReview(
-            @PathVariable int productId, @RequestBody ProductReviewRequestModel productReviewModel) {
-        return ResponseEntity.status(200).body(productReviewService.patchProductReview(productId, productReviewModel));
+    public ResponseEntity<ProductReviewResponseModel> patchProductReview(Principal principal,
+                                                                         @PathVariable int productId,
+                                                                         @RequestBody ProductReviewRequestModel productReviewModel) {
+        return ResponseEntity
+                .status(200)
+                .body(productReviewService.patchProductReview(productId, productReviewModel, principal));
     }
 
     //TODO: not used. or just add some endpoints for orders etc as well. or endpoints for removing past certain time or unused stuff etc.

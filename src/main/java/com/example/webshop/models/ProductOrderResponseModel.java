@@ -15,7 +15,10 @@ public class ProductOrderResponseModel {
     public ProductOrderResponseModel(ProductOrder productOrder) {
         this.timeCreatedUTC = productOrder.getTimeCreatedUTC();
         this.products = productOrder.getProducts()
-                .stream().map(product -> new ProductLightResponseModel(product, ProductService.getPriceAtOrderTime(product)))
+                .stream().map(product -> new ProductLightResponseModel(
+                        product,
+                        ProductService.getPriceAtOrderTime(product, productOrder))
+                )
                 .collect(Collectors.toList());
     }
 

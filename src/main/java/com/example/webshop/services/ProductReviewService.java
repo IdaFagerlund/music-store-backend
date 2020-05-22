@@ -49,10 +49,11 @@ public class ProductReviewService {
     }
 
     public ProductReviewResponseModel patchProductReview(int productId,
-                                                         ProductReviewRequestModel updatedProductReview) {
+                                                         ProductReviewRequestModel updatedProductReview,
+                                                         Principal principal) {
         Product product = productService.findProductById(productId);
         ProductReview productReview = product.getProductReviews()
-                .stream().filter(review -> review.getUser().getId() == 1)
+                .stream().filter(review -> review.getUser().getUsername().equals(principal.getName()))
                 .findFirst().get();
 
         productReview.setComment(updatedProductReview.getComment());

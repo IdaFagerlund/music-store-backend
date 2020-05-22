@@ -2,7 +2,6 @@ package com.example.webshop.entities;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -14,14 +13,20 @@ public class ProductOrder {
     private Instant timeCreatedUTC;
     @ManyToOne(fetch = FetchType.LAZY)
     private AppUser appUser;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "product_order_product",
             joinColumns = @JoinColumn(name = "product_order_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
-    private Set<Product> products = new HashSet<>();
+    private Set<Product> products;
 
     public ProductOrder() {
+    }
+
+    public ProductOrder(Set<Product> products, AppUser appUser) {
+        this.timeCreatedUTC = Instant.now();
+        this.appUser = appUser;
+        this.products = products;
     }
 
     public Integer getId() {

@@ -28,10 +28,14 @@ public class AppUserService {
     public void register(AppUser appUser) {
         appUser.setPassword(bCryptPasswordEncoder.encode(appUser.getPassword()));
         UserRole userRole = userRoleRepository.findByUserRole(UserRoleEnum.ROLE_USER);
-        userRole.getAppUsers().add(appUser);
-        appUser.getUserRoles().add(userRole);
+        //userRole.getAppUsers().add(appUser);
+        //appUser.getUserRoles().add(userRole);
         //System.out.println(userRole.toString());
         //appUser.getUserRoles().add();
+
+        System.out.println(bCryptPasswordEncoder.encode("user"));
+        System.out.println(bCryptPasswordEncoder.encode("admin"));
+        System.out.println(bCryptPasswordEncoder.encode("owner"));
         appUserRepository.save(appUser);
     }
 

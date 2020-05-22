@@ -23,7 +23,7 @@ public class Product {
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Pricing> prices;
     @ManyToMany(mappedBy = "products")
-    private Set<ProductOrder> productOrders = new HashSet<>();
+    private Set<ProductOrder> productOrders;
 
     public Product() {
     }
@@ -37,6 +37,7 @@ public class Product {
         Pricing pricing = new Pricing(price);
         pricing.setProduct(this);
         this.prices = Arrays.asList(pricing);
+        this.productOrders = new HashSet<>();
     }
 
     public Product(ProductRequestModel productModel) {
@@ -47,6 +48,7 @@ public class Product {
         Pricing pricing = new Pricing(productModel.getPrice());
         pricing.setProduct(this);
         this.prices = Arrays.asList(pricing);
+        this.productOrders = new HashSet<>();
     }
 
     public void addPricing(Pricing newPricing) {

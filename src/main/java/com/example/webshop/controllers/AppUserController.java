@@ -12,7 +12,7 @@ import java.security.Principal;
 @RequestMapping("/users")
 public class AppUserController {
 
-    private final AppUserService appUserService;
+    private final AppUserService appUserService;//TODO model entity
 
     public AppUserController(AppUserService appUserService) {
         this.appUserService = appUserService;
@@ -28,6 +28,6 @@ public class AppUserController {
     public ResponseEntity<UserDataResponseModel> getUserData(Principal principal) {
         return ResponseEntity.status(200).body(appUserService.getUserData(principal));
     }
-    
+
 
 }
