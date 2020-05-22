@@ -12,10 +12,13 @@ public class ProductReviewResponseModel {
     private Instant timeCreatedUTC;
     private Instant lastTimeUpdatedUTC;
 
+    public ProductReviewResponseModel() {
+    }
+
     public ProductReviewResponseModel(ProductReview productReview) {
         this.comment = productReview.getComment();
         this.stars = productReview.getStars();
-        this.username = productReview.getUser().getUsername();
+        this.username = productReview.getAppUser().getUsername();
         this.timeCreatedUTC = productReview.getTimeCreatedUTC();
         this.lastTimeUpdatedUTC = productReview.getLastTimeUpdatedUTC();
     }
@@ -24,20 +27,40 @@ public class ProductReviewResponseModel {
         return comment;
     }
 
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
     public int getStars() {
         return stars;
+    }
+
+    public void setStars(int stars) {
+        this.stars = stars;
     }
 
     public String getUsername() {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public Instant getTimeCreatedUTC() {
         return timeCreatedUTC;
     }
 
+    public void setTimeCreatedUTC(Instant timeCreatedUTC) {
+        this.timeCreatedUTC = timeCreatedUTC;
+    }
+
     public Instant getLastTimeUpdatedUTC() {
         return lastTimeUpdatedUTC;
+    }
+
+    public void setLastTimeUpdatedUTC(Instant lastTimeUpdatedUTC) {
+        this.lastTimeUpdatedUTC = lastTimeUpdatedUTC;
     }
 
 }

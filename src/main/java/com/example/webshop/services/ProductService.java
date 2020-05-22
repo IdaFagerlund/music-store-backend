@@ -25,13 +25,13 @@ public class ProductService {
     }
 
     public static double getPriceAtOrderTime(Product product, ProductOrder productOrder) {
-        // 1. Sorts the list so the prices will be browsed through from the most recent to the oldest.
+        // 1. Sort the list so the prices will be browsed through from the most recent to the oldest.
         // 2. Exclude the prices that existed after the order was placed.
         // 3. Because the list was sorted, grabbing the first element now returns the price closest to the order time.
         Pricing pricingWhenProductWasOrdered = product.getPrices()
                 .stream()
-                .sorted((o1, o2) -> o2.getTimeUTC().compareTo(o1.getTimeUTC()))
-                .filter(pricing -> productOrder.getTimeCreatedUTC().compareTo(pricing.getTimeUTC()) > 0)
+                .sorted((o1, o2) -> o2.getTimeAtPricingUTC().compareTo(o1.getTimeAtPricingUTC()))
+                .filter(pricing -> productOrder.getTimeCreatedUTC().compareTo(pricing.getTimeAtPricingUTC()) > 0)
                 .findFirst()
                 .get();
 
@@ -96,7 +96,7 @@ public class ProductService {
     protected double getCurrentProductPrice(Product product) {
         return product.getPrices()
                 .stream()
-                .max(Comparator.comparing(Pricing::getTimeUTC))
+                .max(Comparator.comparing(Pricing::getTimeAtPricingUTC))
                 .get()
                 .getPrice();
     }

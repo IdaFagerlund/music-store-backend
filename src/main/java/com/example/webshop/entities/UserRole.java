@@ -3,7 +3,6 @@ package com.example.webshop.entities;
 import com.example.webshop.security.UserRoleEnum;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -14,16 +13,10 @@ public class UserRole {
     private Integer id;
     @Enumerated(EnumType.STRING)
     private UserRoleEnum userRole;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<AppUser> appUsers;
 
     public UserRole() {
-    }
-
-    public UserRole(Integer id, UserRoleEnum userRole) {
-        this.id = id;
-        this.userRole = userRole;
-        this.appUsers = new HashSet<>();
     }
 
     public Integer getId() {

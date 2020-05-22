@@ -12,6 +12,9 @@ public class ProductOrderResponseModel {
     private Instant timeCreatedUTC;
     private List<ProductLightResponseModel> products;
 
+    public ProductOrderResponseModel() {
+    }
+
     public ProductOrderResponseModel(ProductOrder productOrder) {
         this.timeCreatedUTC = productOrder.getTimeCreatedUTC();
         this.products = productOrder.getProducts()
@@ -26,8 +29,16 @@ public class ProductOrderResponseModel {
         return timeCreatedUTC;
     }
 
+    public void setTimeCreatedUTC(Instant timeCreatedUTC) {
+        this.timeCreatedUTC = timeCreatedUTC;
+    }
+
     public List<ProductLightResponseModel> getProducts() {
         return products;
+    }
+
+    public void setProducts(List<ProductLightResponseModel> products) {
+        this.products = products;
     }
 
 }

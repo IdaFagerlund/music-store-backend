@@ -6,8 +6,8 @@ VALUES (1003, "user", "$2a$10$48A4EwdmMTgfHKGZ2v/7R.SKRMBjsPQsBoj6YygWA2yRcpTouV
 (1004, "admin", "$2a$10$fO7hsUpfSAarKNTMOHwfgOjl1oHiL07ptEVJ2xJUxGbSx1RPDUfJm"),
 (1005, "owner", "$2a$10$mpMMyZuhD1fY6c4onPgCQ.OppZLQVKWOj2U1.4T420ur3jcFC8L0O");
 
-INSERT INTO product (id, average_review_stars, description, is_removed, name)
-VALUES (1006, 3, "the description", false, "product name");
+INSERT INTO product (id, average_review_stars, description, is_removed, name, is_featured, stock)
+VALUES (1006, 3, "the description", false, "product name", false, 10);
 
-INSERT INTO pricing (id, price, timeutc, product_id)
+INSERT INTO pricing (id, price, time_at_pricingutc, product_id)
 VALUES (1007, 100, "2020-01-22T00:00:00", 1006), (1008, 200, "2020-02-23T00:00:00", 1006);

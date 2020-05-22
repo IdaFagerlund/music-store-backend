@@ -41,7 +41,7 @@ public class ProductReviewService {
 
         ProductReview productReview = new ProductReview(productReviewModel);
         productReview.setProduct(product);
-        productReview.setUser(appUser);
+        productReview.setAppUser(appUser);
 
         ProductReview savedReview = productReviewRepository.save(productReview);
         productService.updateAverageReviewStars(productId);
@@ -53,7 +53,7 @@ public class ProductReviewService {
                                                          Principal principal) {
         Product product = productService.findProductById(productId);
         ProductReview productReview = product.getProductReviews()
-                .stream().filter(review -> review.getUser().getUsername().equals(principal.getName()))
+                .stream().filter(review -> review.getAppUser().getUsername().equals(principal.getName()))
                 .findFirst().get();
 
         productReview.setComment(updatedProductReview.getComment());
@@ -68,10 +68,10 @@ public class ProductReviewService {
     public void deleteProductReview(int productId) {
         Product product = productService.findProductById(productId);
         ProductReview productReview = product.getProductReviews()
-                .stream().filter(review -> review.getUser().getId() == 1)
+                .stream().filter(review -> review.getAppUser().getId() == 1)
                 .findFirst().get();
 
-        productReview.getUser().getProductReviews().remove(productReview);
+        productReview.getAppUser().getProductReviews().remove(productReview);
         productReview.getProduct().getProductReviews().remove(productReview);
 
         productReviewRepository.delete(productReview);

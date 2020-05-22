@@ -15,7 +15,7 @@ public class Pricing {
     @Id
     @GeneratedValue
     private Integer id;
-    private Instant timeUTC;
+    private Instant timeAtPricingUTC;
     private double price;
     @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
@@ -24,15 +24,7 @@ public class Pricing {
     }
 
     public Pricing(double price) {
-        this.timeUTC = Instant.now();
-        this.price = price;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
+        this.timeAtPricingUTC = Instant.now();
         this.price = price;
     }
 
@@ -44,12 +36,20 @@ public class Pricing {
         this.id = id;
     }
 
-    public Instant getTimeUTC() {
-        return timeUTC;
+    public Instant getTimeAtPricingUTC() {
+        return timeAtPricingUTC;
     }
 
-    public void setTimeUTC(Instant timeUTC) {
-        this.timeUTC = timeUTC;
+    public void setTimeAtPricingUTC(Instant timeAtPricingUTC) {
+        this.timeAtPricingUTC = timeAtPricingUTC;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public Product getProduct() {
@@ -60,43 +60,4 @@ public class Pricing {
         this.product = product;
     }
 
-    //    @Id
-//    @GeneratedValue
-//    private Integer id;
-//    private String utcTime;
-//    private double price;
-////    @ManyToOne(fetch = FetchType.LAZY)
-////    private Product product;
-//
-//    public Pricinggg() {
-//    }
-//
-//    public Pricinggg(double price) {
-//        this.utcTime = "some point in time";
-//        this.price = price;
-//    }
-//
-//    public Integer getId() {
-//        return id;
-//    }
-//
-//    public void setId(Integer id) {
-//        this.id = id;
-//    }
-//
-//    public String getUtcTime() {
-//        return utcTime;
-//    }
-//
-//    public void setUtcTime(String utcTime) {
-//        this.utcTime = utcTime;
-//    }
-//
-//    public double getPrice() {
-//        return price;
-//    }
-//
-//    public void setPrice(double price) {
-//        this.price = price;
-//    }
 }

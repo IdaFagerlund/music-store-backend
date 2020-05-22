@@ -3,14 +3,16 @@ package com.example.webshop.models;
 public class AppUserRequestModel {
 
     private String username;
+    private String email;
     private String password;
 
     public AppUserRequestModel() {
     }
 
-    public AppUserRequestModel(String username, String password) {
+    public AppUserRequestModel(String username, String password, String email) {
         this.username = username;
         this.password = password;
+        this.email = email;
     }
 
     public String getUsername() {
@@ -19,6 +21,14 @@ public class AppUserRequestModel {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

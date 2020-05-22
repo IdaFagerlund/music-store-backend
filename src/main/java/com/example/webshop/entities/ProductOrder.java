@@ -13,7 +13,7 @@ public class ProductOrder {
     private Instant timeCreatedUTC;
     @ManyToOne(fetch = FetchType.LAZY)
     private AppUser appUser;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "product_order_product",
             joinColumns = @JoinColumn(name = "product_order_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
@@ -60,4 +60,5 @@ public class ProductOrder {
     public void setProducts(Set<Product> products) {
         this.products = products;
     }
+
 }

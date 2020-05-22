@@ -14,35 +14,27 @@ public class Product {
     private String name;
     private String description;
     private int averageReviewStars;
-    //TODO: featured and stock -------------------------------
+    private int stock;
+    private boolean isFeatured;
     // Don't just delete the product right away because ongoing and completed orders containing this product may still need to
-    // be around for a while longer. These products will however not be sent to the browse page on the frontend
+    // be around for a while longer. These marked products will however not be sent to the browse page on the frontend
     private boolean isRemoved;
-    @OneToMany(mappedBy = "product", orphanRemoval = true)
+    @OneToMany(mappedBy = "product", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ProductReview> productReviews;
-    @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "product", orphanRemoval = true, fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Pricing> prices;
-    @ManyToMany(mappedBy = "products")
+    @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
     private Set<ProductOrder> productOrders;
 
     public Product() {
     }
 
-    public Product(String name, String description, int averageReviewStars, double price) {
-        this.name = name;
-        this.description = description;
-        this.averageReviewStars = averageReviewStars;
-        this.isRemoved = false;
-        this.productReviews = new ArrayList<>();
-        Pricing pricing = new Pricing(price);
-        pricing.setProduct(this);
-        this.prices = Arrays.asList(pricing);
-        this.productOrders = new HashSet<>();
-    }
-
     public Product(ProductRequestModel productModel) {
         this.name = productModel.getName();
         this.description = productModel.getDescription();
+        this.stock = productModel.getStock();
+        this.isFeatured = productModel.isFeatured();
         this.isRemoved = false;
         this.productReviews = new ArrayList<>();
         Pricing pricing = new Pricing(productModel.getPrice());
@@ -88,20 +80,20 @@ public class Product {
         this.averageReviewStars = averageReviewStars;
     }
 
-    public List<Pricing> getPrices() {
-        return prices;
+    public int getStock() {
+        return stock;
     }
 
-    public void setPrices(List<Pricing> prices) {
-        this.prices = prices;
+    public void setStock(int stock) {
+        this.stock = stock;
     }
 
-    public List<ProductReview> getProductReviews() {
-        return productReviews;
+    public boolean isFeatured() {
+        return isFeatured;
     }
 
-    public void setProductReviews(List<ProductReview> productReviews) {
-        this.productReviews = productReviews;
+    public void setFeatured(boolean featured) {
+        isFeatured = featured;
     }
 
     public boolean isRemoved() {
@@ -112,6 +104,22 @@ public class Product {
         isRemoved = removed;
     }
 
+    public List<ProductReview> getProductReviews() {
+        return productReviews;
+    }
+
+    public void setProductReviews(List<ProductReview> productReviews) {
+        this.productReviews = productReviews;
+    }
+
+    public List<Pricing> getPrices() {
+        return prices;
+    }
+
+    public void setPrices(List<Pricing> prices) {
+        this.prices = prices;
+    }
+
     public Set<ProductOrder> getProductOrders() {
         return productOrders;
     }
@@ -119,4 +127,5 @@ public class Product {
     public void setProductOrders(Set<ProductOrder> productOrders) {
         this.productOrders = productOrders;
     }
+
 }

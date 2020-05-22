@@ -28,7 +28,8 @@ public class AppUserService {
     public void register(AppUserRequestModel appUserModel) {
         AppUser appUser = new AppUser(
                 appUserModel.getUsername(),
-                bCryptPasswordEncoder.encode(appUserModel.getPassword())
+                bCryptPasswordEncoder.encode(appUserModel.getPassword()),
+                appUserModel.getEmail()
         );
         appUser.getUserRoles().add(userRoleRepository.findByUserRole(UserRoleEnum.ROLE_USER));
         appUserRepository.save(appUser);

@@ -23,12 +23,6 @@ public class ProductReview {
     public ProductReview() {
     }
 
-    public ProductReview(String comment, int stars) {
-        this.comment = comment;
-        this.stars = stars;
-        this.timeCreatedUTC = Instant.now();
-    }
-
     public ProductReview(ProductReviewRequestModel productReviewModel) {
         this.comment = productReviewModel.getComment();
         this.stars = productReviewModel.getStars();
@@ -59,22 +53,6 @@ public class ProductReview {
         this.stars = stars;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public AppUser getUser() {
-        return appUser;
-    }
-
-    public void setUser(AppUser appUser) {
-        this.appUser = appUser;
-    }
-
     public Instant getTimeCreatedUTC() {
         return timeCreatedUTC;
     }
@@ -91,6 +69,14 @@ public class ProductReview {
         this.lastTimeUpdatedUTC = lastTimeUpdatedUTC;
     }
 
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
     public AppUser getAppUser() {
         return appUser;
     }
@@ -98,4 +84,5 @@ public class ProductReview {
     public void setAppUser(AppUser appUser) {
         this.appUser = appUser;
     }
+
 }

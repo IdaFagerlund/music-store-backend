@@ -28,29 +28,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/users/register").permitAll()
-                .antMatchers(HttpMethod.GET, "/test/user").hasRole("USER")
-                .antMatchers(HttpMethod.GET, "/test/admin").hasRole("ADMIN")
-                //.antMatchers(HttpMethod.GET, "/test/").hasRole("USER")
+                //.antMatchers(HttpMethod.GET, "/test/user").hasRole("USER")
+                //.antMatchers(HttpMethod.GET, "/test/admin").hasRole("ADMIN")
                 .antMatchers("*").permitAll()
                 .anyRequest().authenticated()
-
-                //.successForwardUrl("/users/test")
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .formLogin()
-//                .loginPage("/users/login")
-//                .permitAll()
-        ;
-
-//        http
-//                .authorizeRequests()
-//                .anyRequest().permitAll();
-
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        auth.getAuthorities();
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override

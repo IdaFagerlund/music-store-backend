@@ -14,23 +14,25 @@ public class AppUser {
     private Integer id;
     private String username;
     private String password;
-    @OneToMany(mappedBy = "appUser", orphanRemoval = true)
+    private String email;
+    @OneToMany(mappedBy = "appUser", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ProductReview> productReviews;
-    @OneToMany(mappedBy = "appUser", orphanRemoval = true)
+    @OneToMany(mappedBy = "appUser", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ProductOrder> productOrders;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "app_user_user_role",
             joinColumns = @JoinColumn(name = "app_user_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_roll_id")
+            inverseJoinColumns = @JoinColumn(name = "user_role_id")
     )
     private Set<UserRole> userRoles;
 
     public AppUser() {
     }
 
-    public AppUser(String username, String password) {
+    public AppUser(String username, String password, String email) {
         this.username = username;
         this.password = password;
+        this.email = email;
         this.productReviews = new ArrayList<>();
         this.productOrders = new ArrayList<>();
         this.userRoles = new HashSet<>();
@@ -58,6 +60,14 @@ public class AppUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public List<ProductReview> getProductReviews() {
