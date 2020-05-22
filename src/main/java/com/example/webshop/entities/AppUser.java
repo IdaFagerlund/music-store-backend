@@ -1,11 +1,10 @@
 package com.example.webshop.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class AppUser {
@@ -19,6 +18,12 @@ public class AppUser {
     private List<ProductReview> productReviews;
     @OneToMany(mappedBy = "appUser", orphanRemoval = true)
     private List<ProductOrder> productOrders;
+    @ManyToMany
+    @JoinTable(name = "app_user_user_role",
+            joinColumns = @JoinColumn(name = "app_user_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_roll_id")
+    )
+    private Set<UserRole> userRoles;
 
     public AppUser() {
     }
@@ -28,6 +33,7 @@ public class AppUser {
         this.password = password;
         this.productReviews = new ArrayList<>();
         this.productOrders = new ArrayList<>();
+        this.userRoles = new HashSet<>();
     }
 
     public Integer getId() {
@@ -68,6 +74,14 @@ public class AppUser {
 
     public void setProductOrders(List<ProductOrder> productOrders) {
         this.productOrders = productOrders;
+    }
+
+    public Set<UserRole> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(Set<UserRole> userRoles) {
+        this.userRoles = userRoles;
     }
 
 }

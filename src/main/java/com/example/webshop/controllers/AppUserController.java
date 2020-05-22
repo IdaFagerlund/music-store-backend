@@ -28,4 +28,6 @@ public class AppUserController {
     public ResponseEntity<UserDataResponseModel> getUserData(Principal principal) {
         return ResponseEntity.status(200).body(appUserService.getUserData(principal));
     }
+    
+
 }

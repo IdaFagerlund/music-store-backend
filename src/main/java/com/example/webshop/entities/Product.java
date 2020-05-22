@@ -14,6 +14,7 @@ public class Product {
     private String name;
     private String description;
     private int averageReviewStars;
+    //TODO: featured and stock -------------------------------
     // Don't just delete the product right away because ongoing and completed orders containing this product may still need to
     // be around for a while longer. These products will however not be sent to the browse page on the frontend
     private boolean isRemoved;
