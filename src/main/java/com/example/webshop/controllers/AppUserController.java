@@ -1,6 +1,6 @@
 package com.example.webshop.controllers;
 
-import com.example.webshop.entities.AppUser;
+import com.example.webshop.models.AppUserRequestModel;
 import com.example.webshop.models.UserDataResponseModel;
 import com.example.webshop.services.AppUserService;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +19,8 @@ public class AppUserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Void> register(@RequestBody AppUser appUser) {
-        appUserService.register(appUser);
+    public ResponseEntity<Void> register(@RequestBody AppUserRequestModel appUserModel) {
+        appUserService.register(appUserModel);
         return ResponseEntity.status(201).build();
     }
 

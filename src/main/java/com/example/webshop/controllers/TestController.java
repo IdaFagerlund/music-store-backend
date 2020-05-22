@@ -18,6 +18,16 @@ public class TestController {
         this.testService = testService;
     }
 
+    @GetMapping("/user")
+    public String getTeasdassts() {
+        return "user";
+    }
+
+    @GetMapping("/admin")
+    public String getTeasdaasdssts() {
+        return "admin";
+    }
+
     @GetMapping("/")
     public ResponseEntity<List<TestResponseModel>> getTests() {
         return ResponseEntity.status(200).body(testService.findAll());

@@ -14,7 +14,7 @@ public class UserRole {
     private Integer id;
     @Enumerated(EnumType.STRING)
     private UserRoleEnum userRole;
-    @ManyToMany(mappedBy = "userRoles")
+    @ManyToMany
     private Set<AppUser> appUsers;
 
     public UserRole() {

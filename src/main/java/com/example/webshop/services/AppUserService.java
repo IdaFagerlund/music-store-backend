@@ -1,7 +1,7 @@
 package com.example.webshop.services;
 
 import com.example.webshop.entities.AppUser;
-import com.example.webshop.entities.UserRole;
+import com.example.webshop.models.AppUserRequestModel;
 import com.example.webshop.models.UserDataResponseModel;
 import com.example.webshop.repositories.AppUserRepository;
 import com.example.webshop.repositories.UserRoleRepository;
@@ -25,18 +25,17 @@ public class AppUserService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public void register(AppUser appUser) {
-        appUser.setPassword(bCryptPasswordEncoder.encode(appUser.getPassword()));
-        UserRole userRole = userRoleRepository.findByUserRole(UserRoleEnum.ROLE_USER);
-        //userRole.getAppUsers().add(appUser);
-        //appUser.getUserRoles().add(userRole);
-        //System.out.println(userRole.toString());
-        //appUser.getUserRoles().add();
-
-        System.out.println(bCryptPasswordEncoder.encode("user"));
-        System.out.println(bCryptPasswordEncoder.encode("admin"));
-        System.out.println(bCryptPasswordEncoder.encode("owner"));
+    public void register(AppUserRequestModel appUserModel) {
+        AppUser appUser = new AppUser(
+                appUserModel.getUsername(),
+                bCryptPasswordEncoder.encode(appUserModel.getPassword())
+        );
+        appUser.getUserRoles().add(userRoleRepository.findByUserRole(UserRoleEnum.ROLE_USER));
         appUserRepository.save(appUser);
+    }
+
+    public AppUser getAppUser(String username) {
+        return appUserRepository.findByUsername(username);
     }
 
     public UserDataResponseModel getUserData(Principal principal) {
