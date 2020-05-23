@@ -5,11 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @NoArgsConstructor @AllArgsConstructor @Getter @Setter
-public class ProductOrderRequestModel {
+public class OrderedProductRequestModel {
 
-    private List<OrderedProductRequestModel> orderedProducts;
+    private int id;
+    private int quantity;
 
 }

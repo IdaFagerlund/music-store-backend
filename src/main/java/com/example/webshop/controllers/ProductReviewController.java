@@ -42,7 +42,7 @@ public class ProductReviewController {
                 .body(productReviewService.patchProductReview(productId, productReviewModel, principal));
     }
 
-    //TODO: not used. or just add some endpoints for orders etc as well. or endpoints for removing past certain time or unused stuff etc.
+
     @DeleteMapping("/{productId}")
     public ResponseEntity<Void> deleteProductReview(@PathVariable int productId) {
         productReviewService.deleteProductReview(productId);

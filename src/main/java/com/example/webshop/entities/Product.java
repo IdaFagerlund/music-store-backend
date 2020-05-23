@@ -41,7 +41,7 @@ public class Product {
         this.productReviews = new ArrayList<>();
         Pricing pricing = new Pricing(productModel.getPrice());
         pricing.setProduct(this);
-        this.prices = Arrays.asList(pricing); //TODO only helper method? ro only keep this to service
+        this.prices = Arrays.asList(pricing);
         this.productOrders = new HashSet<>();
     }
 

@@ -5,6 +5,7 @@ import com.example.webshop.entities.Product;
 import com.example.webshop.entities.ProductOrder;
 import com.example.webshop.entities.ProductReview;
 import com.example.webshop.exceptions.NotFoundException;
+import com.example.webshop.exceptions.ValidationException;
 import com.example.webshop.models.ProductFullResponseModel;
 import com.example.webshop.models.ProductLightResponseModel;
 import com.example.webshop.models.ProductRequestModel;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final UtilService utilService;
 
     public static double getPriceAtOrderTime(Product product, ProductOrder productOrder) {
         // 1. Sort the list so the prices will be browsed through from the most recent to the oldest.
@@ -51,16 +54,25 @@ public class ProductService {
     }
 
     public ProductLightResponseModel addProduct(ProductRequestModel newProduct) {
+        utilService.validateThatFieldsAreNotNullOrEmpty(
+                newProduct.getName(), newProduct.getDescription()
+        );
+        validateName(newProduct.getName());
+
         Product savedProduct = productRepository.save(new Product(newProduct));
         return new ProductLightResponseModel(savedProduct, getCurrentProductPrice(savedProduct));
     }
 
     public ProductLightResponseModel patchProduct(int id, ProductRequestModel updatedProduct) {
         Product product = findProductById(id);
-
+        if(!updatedProduct.getName().equals(product.getName())) {
+            validateName(updatedProduct.getName());
+        }
+        product.addPricing(new Pricing(updatedProduct.getPrice()));
         product.setName(updatedProduct.getName());
         product.setDescription(updatedProduct.getDescription());
-        product.addPricing(new Pricing(updatedProduct.getPrice()));
+        product.setStock(updatedProduct.getStock());
+        product.setFeatured(updatedProduct.isFeatured());
 
         return new ProductLightResponseModel(productRepository.save(product), getCurrentProductPrice(product));
     }
@@ -97,6 +109,13 @@ public class ProductService {
                 .max(Comparator.comparing(Pricing::getTimeAtPricingUTC))
                 .get()
                 .getPrice();
+    }
+
+    private void validateName(String name) {
+        Optional<Product> product = productRepository.findByName(name);
+        if(product.isPresent()) {
+            throw new ValidationException(409, "Unavailable name");
+        }
     }
 
 }

@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,7 +14,7 @@ public class UserDataResponseModel {
     private String username;
     private List<ProductReviewResponseModel> productReviews;
     private List<ProductOrderResponseModel> productOrders;
-    private List<String> authorities;
+    private List<String> roles;
 
     public UserDataResponseModel(AppUser appUser) {
         this.username = appUser.getUsername();
@@ -25,7 +24,9 @@ public class UserDataResponseModel {
         this.productOrders = appUser.getProductOrders()
                 .stream().map(ProductOrderResponseModel::new)
                 .collect(Collectors.toList());
-        this.authorities = new ArrayList<>();
+        this.roles = appUser.getUserRoles()
+                .stream().map(userRole -> userRole.getUserRole().toString())
+                .collect(Collectors.toList());
     }
 
 }

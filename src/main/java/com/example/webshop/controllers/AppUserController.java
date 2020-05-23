@@ -1,7 +1,6 @@
 package com.example.webshop.controllers;
 
 import com.example.webshop.models.AppUserRequestModel;
-import com.example.webshop.models.ErrorResponseModel;
 import com.example.webshop.models.UserDataResponseModel;
 import com.example.webshop.services.AppUserService;
 import org.springframework.http.ResponseEntity;
@@ -26,18 +25,13 @@ public class AppUserController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<UserDataResponseModel> getAllUserData(Principal principal) {
-        return ResponseEntity.status(200).body(appUserService.getAllUserData(principal));
+    public ResponseEntity<UserDataResponseModel> getAllDataForUser(Principal principal) {
+        return ResponseEntity.status(200).body(appUserService.getAllDataForUser(principal));
     }
 
     @PatchMapping("/")
     public ResponseEntity<String> patchUser(Principal principal, @RequestBody AppUserRequestModel appUserModel) {
         return ResponseEntity.status(200).body(appUserService.patchUser(principal, appUserModel));
-    }
-
-    @GetMapping("/hi")
-    public ResponseEntity<ErrorResponseModel> hi(){
-        return ResponseEntity.status(200).body(new ErrorResponseModel("hello"));
     }
 
 }

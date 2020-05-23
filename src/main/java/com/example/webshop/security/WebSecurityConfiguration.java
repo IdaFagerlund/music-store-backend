@@ -1,10 +1,12 @@
 package com.example.webshop.security;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
@@ -23,27 +25,41 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.cors().and().csrf().disable()
+        http
+                .cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/**").permitAll();
-                //.antMatchers(HttpMethod.GET, "/users/hi").permitAll()
-                //.antMatchers(HttpMethod.POST, "/users/register").permitAll()
 
-                //.antMatchers(HttpMethod.GET, "/test/user").hasRole("USER")
-                //.antMatchers(HttpMethod.GET, "/test/admin").hasRole("ADMIN")
-                //.antMatchers("*").permitAll()
-//                .anyRequest().authenticated()
-//                .and()
-//                .addFilter(new JWTAuthenticationFilter(authenticationManager()))
-//                .addFilter(new JWTAuthorizationFilter(authenticationManager()))
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .antMatchers(HttpMethod.POST, "/users/register").permitAll()
+                .antMatchers(HttpMethod.GET, "/users/").hasRole("USER")
+                .antMatchers(HttpMethod.PATCH, "/users/").hasRole("USER")
+
+                .antMatchers(HttpMethod.GET, "/products/all/light").permitAll()
+                .antMatchers(HttpMethod.GET, "/products/all/full").permitAll()
+                .antMatchers(HttpMethod.POST, "/products/").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PATCH, "/products/{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PATCH, "/products/mark-as-removed").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/products/").hasRole("DEVELOPER")
+
+                .antMatchers(HttpMethod.GET, "/product-orders/").hasRole("USER")
+                .antMatchers(HttpMethod.POST, "/product-orders/").hasRole("USER")
+
+                .antMatchers(HttpMethod.GET, "/product-reviews/{productId}").permitAll()
+                .antMatchers(HttpMethod.POST, "/product-reviews/{productId}").hasRole("USER")
+                .antMatchers(HttpMethod.PATCH, "/product-reviews/{productId}").hasRole("USER")
+                .antMatchers(HttpMethod.DELETE, "/product-reviews/{productId}").hasRole("USER")
+
+                .anyRequest().authenticated()
+                .and()
+                .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+                .addFilter(new JWTAuthorizationFilter(authenticationManager()))
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
+
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
-
 
 //    @Bean
 //    CorsConfigurationSource corsConfigurationSource() {

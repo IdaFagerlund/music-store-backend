@@ -66,5 +66,4 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
     }
 
-
 }

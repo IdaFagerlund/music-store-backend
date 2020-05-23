@@ -41,7 +41,7 @@ public class AppUserService {
         appUserRepository.save(appUser);
     }
 
-    public UserDataResponseModel getAllUserData(Principal principal) {
+    public UserDataResponseModel getAllDataForUser(Principal principal) {
         return new UserDataResponseModel(findByUsername(principal.getName()));
     }
 
