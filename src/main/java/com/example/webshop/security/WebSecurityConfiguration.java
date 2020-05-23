@@ -1,12 +1,10 @@
 package com.example.webshop.security;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
@@ -27,15 +25,18 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/users/register").permitAll()
+                .antMatchers("/**").permitAll();
+                //.antMatchers(HttpMethod.GET, "/users/hi").permitAll()
+                //.antMatchers(HttpMethod.POST, "/users/register").permitAll()
+
                 //.antMatchers(HttpMethod.GET, "/test/user").hasRole("USER")
                 //.antMatchers(HttpMethod.GET, "/test/admin").hasRole("ADMIN")
-                .antMatchers("*").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .addFilter(new JWTAuthenticationFilter(authenticationManager()))
-                .addFilter(new JWTAuthorizationFilter(authenticationManager()))
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                //.antMatchers("*").permitAll()
+//                .anyRequest().authenticated()
+//                .and()
+//                .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+//                .addFilter(new JWTAuthorizationFilter(authenticationManager()))
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override

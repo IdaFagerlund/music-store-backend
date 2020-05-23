@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class CustomExceptionHandler {
 
-    @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<ErrorResponseModel> handleValidationException(ValidationException e) {
-        return ResponseEntity.status(400).body(new ErrorResponseModel(e.getMessage()));
-    }
-
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponseModel> handleNotFoundException(NotFoundException e) {
         return ResponseEntity.status(404).body(new ErrorResponseModel(e.getMessage()));
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<ErrorResponseModel> handleBadRequestValidationException(ValidationException e) {
+        return ResponseEntity.status(e.getStatus()).body(new ErrorResponseModel(e.getMessage()));
     }
 
 }

@@ -9,7 +9,7 @@ import lombok.Setter;
 public class AppUserRequestModel {
 
     private String username;
-    private String email;
     private String password;
+    private String email;
 
 }

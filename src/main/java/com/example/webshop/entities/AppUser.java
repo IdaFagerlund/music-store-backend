@@ -17,8 +17,10 @@ public class AppUser {
     @Id
     @GeneratedValue
     private Integer id;
+    @Column(unique = true)
     private String username;
     private String password;
+    @Column(unique = true)
     private String email;
     @OneToMany(mappedBy = "appUser", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ProductReview> productReviews;

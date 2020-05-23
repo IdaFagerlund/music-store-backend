@@ -1,6 +1,7 @@
 package com.example.webshop.controllers;
 
 import com.example.webshop.models.AppUserRequestModel;
+import com.example.webshop.models.ErrorResponseModel;
 import com.example.webshop.models.UserDataResponseModel;
 import com.example.webshop.services.AppUserService;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,7 @@ import java.security.Principal;
 @RequestMapping("/users")
 public class AppUserController {
 
-    private final AppUserService appUserService;//TODO model entity
+    private final AppUserService appUserService;
 
     public AppUserController(AppUserService appUserService) {
         this.appUserService = appUserService;
@@ -25,9 +26,18 @@ public class AppUserController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<UserDataResponseModel> getUserData(Principal principal) {
-        return ResponseEntity.status(200).body(appUserService.getUserData(principal));
+    public ResponseEntity<UserDataResponseModel> getAllUserData(Principal principal) {
+        return ResponseEntity.status(200).body(appUserService.getAllUserData(principal));
     }
 
+    @PatchMapping("/")
+    public ResponseEntity<String> patchUser(Principal principal, @RequestBody AppUserRequestModel appUserModel) {
+        return ResponseEntity.status(200).body(appUserService.patchUser(principal, appUserModel));
+    }
+
+    @GetMapping("/hi")
+    public ResponseEntity<ErrorResponseModel> hi(){
+        return ResponseEntity.status(200).body(new ErrorResponseModel("hello"));
+    }
 
 }

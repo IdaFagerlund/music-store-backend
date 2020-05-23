@@ -16,6 +16,7 @@ public class UserRole {
     @GeneratedValue
     private Integer id;
     @Enumerated(EnumType.STRING)
+    @Column(unique = true)
     private UserRoleEnum userRole;
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<AppUser> appUsers;

@@ -9,6 +9,7 @@ import com.example.webshop.models.ProductFullResponseModel;
 import com.example.webshop.models.ProductLightResponseModel;
 import com.example.webshop.models.ProductRequestModel;
 import com.example.webshop.repositories.ProductRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -16,13 +17,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
-
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
 
     public static double getPriceAtOrderTime(Product product, ProductOrder productOrder) {
         // 1. Sort the list so the prices will be browsed through from the most recent to the oldest.

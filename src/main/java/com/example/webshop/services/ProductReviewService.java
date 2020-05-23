@@ -5,8 +5,8 @@ import com.example.webshop.entities.Product;
 import com.example.webshop.entities.ProductReview;
 import com.example.webshop.models.ProductReviewRequestModel;
 import com.example.webshop.models.ProductReviewResponseModel;
-import com.example.webshop.repositories.AppUserRepository;
 import com.example.webshop.repositories.ProductReviewRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -15,18 +15,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class ProductReviewService {
 
     private final ProductReviewRepository productReviewRepository;
     private final ProductService productService;
-    private final AppUserRepository appUserRepository;
-
-    public ProductReviewService(ProductReviewRepository productReviewRepository, ProductService productService,
-                                AppUserRepository appUserRepository) {
-        this.productReviewRepository = productReviewRepository;
-        this.productService = productService;
-        this.appUserRepository = appUserRepository;
-    }
+    private final AppUserService appUserService;
 
     public List<ProductReviewResponseModel> getReviewsForProduct(int productId) {
         return productService.findProductById(productId).getProductReviews()
@@ -37,7 +31,7 @@ public class ProductReviewService {
     public ProductReviewResponseModel addProductReview(int productId, ProductReviewRequestModel productReviewModel,
                                                        Principal principal) {
         Product product = productService.findProductById(productId);
-        AppUser appUser = appUserRepository.findByUsername(principal.getName());
+        AppUser appUser = appUserService.findByUsername(principal.getName());
 
         ProductReview productReview = new ProductReview(productReviewModel);
         productReview.setProduct(product);
