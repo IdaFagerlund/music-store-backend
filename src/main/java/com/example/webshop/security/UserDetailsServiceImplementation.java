@@ -1,7 +1,7 @@
 package com.example.webshop.security;
 
 import com.example.webshop.entities.AppUser;
-import com.example.webshop.services.AppUserService;
+import com.example.webshop.repositories.AppUserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,12 +20,14 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class UserDetailsServiceImplementation implements UserDetailsService {
 
-    private final AppUserService appUserService;
+    //private final AppUserService appUserService;
+    private final AppUserRepository appUserRepository;
 
     // Runs on login
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AppUser appUser = appUserService.findByUsername(username);
+        AppUser appUser = appUserRepository.getByUsername(username);
+        //AppUser appUser = appUserService.findByUsername(username);
 
         Collection<? extends GrantedAuthority> authorities = appUser.getUserRoles()
                 .stream().map(userRole -> new SimpleGrantedAuthority(userRole.getUserRole().toString()))
