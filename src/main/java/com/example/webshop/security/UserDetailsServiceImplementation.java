@@ -2,6 +2,7 @@ package com.example.webshop.security;
 
 import com.example.webshop.entities.AppUser;
 import com.example.webshop.services.AppUserService;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -16,13 +17,10 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class UserDetailsServiceImplementation implements UserDetailsService {
 
     private final AppUserService appUserService;
-
-    public UserDetailsServiceImplementation(AppUserService appUserService) {
-        this.appUserService = appUserService;
-    }
 
     // Runs on login
     @Override

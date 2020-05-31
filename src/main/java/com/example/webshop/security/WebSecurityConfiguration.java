@@ -1,5 +1,6 @@
 package com.example.webshop.security;
 
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -11,16 +12,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private UserDetailsServiceImplementation userDetailsService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public WebSecurityConfiguration(UserDetailsServiceImplementation userDetailsService,
-                                    BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.userDetailsService = userDetailsService;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -37,8 +34,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/products/all/full").permitAll()
                 .antMatchers(HttpMethod.POST, "/products/").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PATCH, "/products/{id}").hasRole("ADMIN")
-                .antMatchers(HttpMethod.PATCH, "/products/mark-as-removed").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/products/").hasRole("DEVELOPER")
+                .antMatchers(HttpMethod.DELETE, "/products/").hasRole("ADMIN")
 
                 .antMatchers(HttpMethod.GET, "/product-orders/").hasRole("USER")
                 .antMatchers(HttpMethod.POST, "/product-orders/").hasRole("USER")

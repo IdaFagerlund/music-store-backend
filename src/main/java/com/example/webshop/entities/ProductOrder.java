@@ -6,7 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor @Getter @Setter
@@ -18,17 +18,13 @@ public class ProductOrder {
     private Instant timeCreatedUTC;
     @ManyToOne(fetch = FetchType.LAZY)
     private AppUser appUser;
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "product_order_product",
-            joinColumns = @JoinColumn(name = "product_order_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private Set<Product> products;
+    @OneToMany(mappedBy = "productOrder", orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<OrderedProduct> orderedProducts;
 
-    public ProductOrder(Set<Product> products, AppUser appUser) {
+    public ProductOrder(List<OrderedProduct> products, AppUser appUser) {
         this.timeCreatedUTC = Instant.now();
         this.appUser = appUser;
-        this.products = products;
+        this.orderedProducts = products;
     }
 
 }

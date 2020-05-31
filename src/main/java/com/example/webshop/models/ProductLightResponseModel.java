@@ -20,7 +20,7 @@ public class ProductLightResponseModel {
         this.id = product.getId();
         this.name = product.getName();
         this.description = product.getDescription();
-        this.averageReviewStars = product.getAverageReviewStars();
+        //this.averageReviewStars = product.getAverageReviewStars();
         this.stock = product.getStock();
         this.isFeatured = product.isFeatured();
         this.price = price;

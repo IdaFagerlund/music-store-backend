@@ -25,23 +25,16 @@ public class ProductReviewController {
     }
 
     @PostMapping("/{productId}")
-    public ResponseEntity<ProductReviewResponseModel> addProductReview(@PathVariable int productId,
-                                                                       @RequestBody ProductReviewRequestModel productReviewModel,
-                                                                       Principal principal) {
-        return ResponseEntity
-                .status(201)
-                .body(productReviewService.addProductReview(productId, productReviewModel, principal));
+    public ResponseEntity<ProductReviewResponseModel> addProductReview(Principal principal, @PathVariable int productId,
+                                                                       @RequestBody ProductReviewRequestModel productReview) {
+        return ResponseEntity.status(201).body(productReviewService.addProductReview(productId, productReview, principal));
     }
 
     @PatchMapping("/{productId}")
-    public ResponseEntity<ProductReviewResponseModel> patchProductReview(Principal principal,
-                                                                         @PathVariable int productId,
-                                                                         @RequestBody ProductReviewRequestModel productReviewModel) {
-        return ResponseEntity
-                .status(200)
-                .body(productReviewService.patchProductReview(productId, productReviewModel, principal));
+    public ResponseEntity<ProductReviewResponseModel> patchProductReview(Principal principal, @PathVariable int productId,
+                                                                         @RequestBody ProductReviewRequestModel productReview) {
+        return ResponseEntity.status(200).body(productReviewService.patchProductReview(productId, productReview, principal));
     }
-
 
     @DeleteMapping("/{productId}")
     public ResponseEntity<Void> deleteProductReview(@PathVariable int productId) {

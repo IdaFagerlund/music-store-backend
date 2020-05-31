@@ -19,8 +19,8 @@ public class AppUserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Void> register(@RequestBody AppUserRequestModel appUserModel) {
-        appUserService.register(appUserModel);
+    public ResponseEntity<Void> register(@RequestBody AppUserRequestModel appUser) {
+        appUserService.register(appUser);
         return ResponseEntity.status(201).build();
     }
 
@@ -30,8 +30,8 @@ public class AppUserController {
     }
 
     @PatchMapping("/")
-    public ResponseEntity<String> patchUser(Principal principal, @RequestBody AppUserRequestModel appUserModel) {
-        return ResponseEntity.status(200).body(appUserService.patchUser(principal, appUserModel));
+    public ResponseEntity<String> patchUser(Principal principal, @RequestBody AppUserRequestModel appUser) {
+        return ResponseEntity.status(200).body(appUserService.patchUser(principal, appUser));
     }
 
 }

@@ -3,7 +3,6 @@ package com.example.webshop.services;
 import com.example.webshop.entities.AppUser;
 import com.example.webshop.entities.Product;
 import com.example.webshop.entities.ProductReview;
-import com.example.webshop.exceptions.ValidationException;
 import com.example.webshop.models.ProductReviewRequestModel;
 import com.example.webshop.models.ProductReviewResponseModel;
 import com.example.webshop.repositories.ProductReviewRepository;
@@ -32,7 +31,7 @@ public class ProductReviewService {
 
     public ProductReviewResponseModel addProductReview(int productId, ProductReviewRequestModel productReviewModel,
                                                        Principal principal) {
-        utilService.validateThatFieldsAreNotNullOrEmpty(productReviewModel.getComment());
+        //utilService.validateThatFieldsAreNotNullOrEmpty(productReviewModel.getComment());
         Product product = productService.findProductById(productId);
         AppUser appUser = appUserService.findByUsername(principal.getName());
         validateProductHasNotBeenReviewedByUsedBefore(product, appUser);
@@ -42,7 +41,7 @@ public class ProductReviewService {
         productReview.setAppUser(appUser);
 
         ProductReview savedReview = productReviewRepository.save(productReview);
-        productService.updateAverageReviewStars(productId);
+        //productService.updateAverageReviewStars(productId);
         return new ProductReviewResponseModel(savedReview);
     }
 
@@ -59,7 +58,7 @@ public class ProductReviewService {
         productReview.setLastTimeUpdatedUTC(Instant.now());
 
         ProductReview savedReview = productReviewRepository.save(productReview);
-        productService.updateAverageReviewStars(productId);
+        //productService.updateAverageReviewStars(productId);
         return new ProductReviewResponseModel(savedReview);
     }
 
@@ -73,14 +72,14 @@ public class ProductReviewService {
         productReview.getProduct().getProductReviews().remove(productReview);
 
         productReviewRepository.delete(productReview);
-        productService.updateAverageReviewStars(productId);
+        //productService.updateAverageReviewStars(productId);
     }
 
     private void validateProductHasNotBeenReviewedByUsedBefore(Product product, AppUser appUser) {
-        appUser.getProductReviews()
-                .stream().filter(product.getProductReviews()::contains)
-                .findAny()
-                .orElseThrow(() -> new ValidationException(409, "Can not review the same product twice"));
+//        appUser.getProductReviews()
+//                .stream().filter(product.getProductReviews()::contains)
+//                .findAny()
+//                .orElseThrow(() -> new ValidationException(409, "Can not review the same product twice"));
     }
 
 }
