@@ -5,7 +5,7 @@ import com.example.webshop.exceptions.NotFoundException;
 import com.example.webshop.exceptions.ValidationException;
 import com.example.webshop.models.AppUserRequestModel;
 import com.example.webshop.models.UserDataResponseModel;
-import com.example.webshop.models.errors.RegisterAndLoginErrorResponseModel;
+import com.example.webshop.models.errors.RegisterErrorResponseModel;
 import com.example.webshop.repositories.AppUserRepository;
 import com.example.webshop.repositories.UserRoleRepository;
 import com.example.webshop.security.UserRoleEnum;
@@ -28,7 +28,7 @@ public class AppUserService {
 
     public void register(AppUserRequestModel appUserModel) {
 
-        RegisterAndLoginErrorResponseModel errors = new RegisterAndLoginErrorResponseModel(
+        RegisterErrorResponseModel errors = new RegisterErrorResponseModel(
                 validateEmail(appUserModel.getEmail()),
                 validateUsername(appUserModel.getUsername()),
                 validatePassword(appUserModel.getPassword())

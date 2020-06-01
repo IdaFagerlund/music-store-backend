@@ -18,16 +18,14 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @AllArgsConstructor
+// Connects the users in the database with the user object spring security works with. Runs on login
 public class UserDetailsServiceImplementation implements UserDetailsService {
 
-    //private final AppUserService appUserService;
     private final AppUserRepository appUserRepository;
 
-    // Runs on login
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AppUser appUser = appUserRepository.getByUsername(username);
-        //AppUser appUser = appUserService.findByUsername(username);
 
         Collection<? extends GrantedAuthority> authorities = appUser.getUserRoles()
                 .stream().map(userRole -> new SimpleGrantedAuthority(userRole.getUserRole().toString()))

@@ -30,6 +30,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
+
         String header = request.getHeader(HEADER_STRING);
 
         if (header == null || !header.startsWith(TOKEN_PREFIX)) {
@@ -41,9 +42,11 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(request, response);
+
     }
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
+        System.out.println("HELLO");
         String token = request.getHeader(HEADER_STRING);
         if (token != null) {
             String user = JWT.require(Algorithm.HMAC512(SECRET.getBytes()))
@@ -53,9 +56,9 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             Claim roles = JWT.require(Algorithm.HMAC512(SECRET.getBytes()))
                     .build()
                     .verify(token.replace(TOKEN_PREFIX, ""))
-                    .getClaim("roles");
+                    .getClaim("authorities");
 
-            Collection<? extends GrantedAuthority> authorities = roles.asList(String.class)
+            Collection<? extends GrantedAuthority>  authorities = roles.asList(String.class)
                     .stream().map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
 
