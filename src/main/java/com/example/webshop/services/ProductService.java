@@ -5,9 +5,10 @@ import com.example.webshop.entities.ProductReview;
 import com.example.webshop.exceptions.NotFoundException;
 import com.example.webshop.exceptions.ValidationException;
 import com.example.webshop.models.ProductCategoryResponseModel;
+import com.example.webshop.models.ProductFullVersionResponseModel;
+import com.example.webshop.models.ProductLightVersionResponseModel;
 import com.example.webshop.models.ProductRequestModel;
-import com.example.webshop.models.ProductResponseModel;
-import com.example.webshop.models.errors.ProductFieldsErrorResponseModel;
+import com.example.webshop.models.errors.ProductFieldsValidationErrorResponseModel;
 import com.example.webshop.repositories.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,15 +23,21 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final UtilService utilService;
 
-    public List<ProductResponseModel> getAllProducts() {
-        return productRepository.findAll().stream().map(product ->
-                new ProductResponseModel(product, getAverageReviewStars(product)))
+    public List<ProductFullVersionResponseModel> getAllProductsFullVersion() {
+        return productRepository.findAll().stream().map(ProductFullVersionResponseModel::new)
                 .collect(Collectors.toList());
     }
 
-    public ProductResponseModel addProduct(ProductRequestModel productModel) {
+    // This one is indented for the product browse page so the frontend only needs to load the minimal amount of data for each page
+    public List<ProductLightVersionResponseModel> getAllProductsLightVersion() {
+        return productRepository.findAll().stream().map(product ->
+                new ProductLightVersionResponseModel(product, product.getProductReviews().size(), getAverageReviewStars(product)))
+                .collect(Collectors.toList());
+    }
+
+    public ProductFullVersionResponseModel addProduct(ProductRequestModel productModel) {
         validateCategories(productModel.getCategory(), productModel.getSubCategory());
-        ProductFieldsErrorResponseModel errors = new ProductFieldsErrorResponseModel(
+        ProductFieldsValidationErrorResponseModel errors = new ProductFieldsValidationErrorResponseModel(
                 validateName(productModel.getName()),
                 validateDescription(productModel.getDescription()),
                 validatePrice(productModel.getPrice()),
@@ -41,14 +48,13 @@ public class ProductService {
             throw new ValidationException(errors);
         }
 
-        Product savedProduct = productRepository.save(new Product(productModel));
-        return new ProductResponseModel(savedProduct, getAverageReviewStars(savedProduct));
+        return new ProductFullVersionResponseModel(productRepository.save(new Product(productModel)));
     }
 
-    public ProductResponseModel patchProduct(int id, ProductRequestModel productModel) {
+    public ProductFullVersionResponseModel patchProduct(int id, ProductRequestModel productModel) {
         Product product = findProductById(id);
         validateCategories(productModel.getCategory(), productModel.getSubCategory());
-        ProductFieldsErrorResponseModel errors = new ProductFieldsErrorResponseModel();
+        ProductFieldsValidationErrorResponseModel errors = new ProductFieldsValidationErrorResponseModel();
 
         if(productModel.getDescription() != null) {
             errors.setDescriptionErrorMessage(validateDescription(productModel.getDescription()));
@@ -68,8 +74,8 @@ public class ProductService {
                 errors.getStockErrorMessage())) {
             throw new ValidationException(errors);
         }
-        Product patchedProduct = productRepository.save(product);
-        return new ProductResponseModel(patchedProduct, getAverageReviewStars(patchedProduct));
+
+        return new ProductFullVersionResponseModel(productRepository.save(product));
     }
 
     public void deleteProduct(int id) {

@@ -1,8 +1,9 @@
 package com.example.webshop.controllers;
 
 import com.example.webshop.models.ProductCategoryResponseModel;
+import com.example.webshop.models.ProductFullVersionResponseModel;
+import com.example.webshop.models.ProductLightVersionResponseModel;
 import com.example.webshop.models.ProductRequestModel;
-import com.example.webshop.models.ProductResponseModel;
 import com.example.webshop.services.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,19 +20,24 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<ProductResponseModel>> getAllProducts() {
-        return ResponseEntity.status(200).body(productService.getAllProducts());
+    @GetMapping("/all/full")
+    public ResponseEntity<List<ProductFullVersionResponseModel>> getAllProductsFullVersion() {
+        return ResponseEntity.status(200).body(productService.getAllProductsFullVersion());
+    }
+
+    @GetMapping("/all/light")
+    public ResponseEntity<List<ProductLightVersionResponseModel>> getAllProductsLightVersion() {
+        return ResponseEntity.status(200).body(productService.getAllProductsLightVersion());
     }
 
     @PostMapping("/")
-    public ResponseEntity<ProductResponseModel> addProduct(@RequestBody ProductRequestModel product) {
+    public ResponseEntity<ProductFullVersionResponseModel> addProduct(@RequestBody ProductRequestModel product) {
         return ResponseEntity.status(201).body(productService.addProduct(product));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ProductResponseModel> patchProduct(@PathVariable int id,
-                                                                  @RequestBody ProductRequestModel product) {
+    public ResponseEntity<ProductFullVersionResponseModel> patchProduct(@PathVariable int id,
+                                                                        @RequestBody ProductRequestModel product) {
         return ResponseEntity.status(200).body(productService.patchProduct(id, product));
     }
 

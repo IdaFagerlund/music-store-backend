@@ -5,7 +5,7 @@ import com.example.webshop.exceptions.NotFoundException;
 import com.example.webshop.exceptions.ValidationException;
 import com.example.webshop.models.AppUserRequestModel;
 import com.example.webshop.models.AppUserResponseModel;
-import com.example.webshop.models.errors.UserFieldsErrorResponseModel;
+import com.example.webshop.models.errors.UserFieldsValidationErrorResponseModel;
 import com.example.webshop.repositories.AppUserRepository;
 import com.example.webshop.repositories.UserRoleRepository;
 import com.example.webshop.security.UserRoleEnum;
@@ -27,7 +27,7 @@ public class AppUserService {
     private final UtilService utilService;
 
     public void register(AppUserRequestModel appUserModel) {
-        UserFieldsErrorResponseModel errors = new UserFieldsErrorResponseModel(
+        UserFieldsValidationErrorResponseModel errors = new UserFieldsValidationErrorResponseModel(
                 validateEmail(appUserModel.getEmail()),
                 validateUsername(appUserModel.getUsername()),
                 validatePassword(appUserModel.getPassword())
@@ -52,7 +52,7 @@ public class AppUserService {
 
     public AppUserResponseModel patchUser(Principal principal, AppUserRequestModel appUserModel) {
         AppUser appUser = findByUsername(principal.getName());
-        UserFieldsErrorResponseModel errors = new UserFieldsErrorResponseModel();
+        UserFieldsValidationErrorResponseModel errors = new UserFieldsValidationErrorResponseModel();
 
         if(appUserModel.getUsername() != null) {
             errors.setUsernameErrorMessage(validateUsername(appUserModel.getUsername()));

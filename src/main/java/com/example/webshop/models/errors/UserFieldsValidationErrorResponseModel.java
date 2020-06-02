@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
-public class UserFieldsErrorResponseModel extends ErrorResponseModel {
+public class UserFieldsValidationErrorResponseModel extends ValidationErrorResponseModel {
 
     private String emailErrorMessage;
     private String usernameErrorMessage;

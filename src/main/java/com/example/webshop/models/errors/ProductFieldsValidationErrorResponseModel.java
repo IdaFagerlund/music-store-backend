@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
-public class ProductFieldsErrorResponseModel extends ErrorResponseModel {
+public class ProductFieldsValidationErrorResponseModel extends ValidationErrorResponseModel {
 
     private String nameErrorMessage;
     private String descriptionErrorMessage;

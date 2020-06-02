@@ -1,6 +1,6 @@
 package com.example.webshop.exceptions;
 
-import com.example.webshop.models.errors.ErrorResponseModel;
+import com.example.webshop.models.errors.ValidationErrorResponseModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,8 +14,8 @@ public class CustomExceptionHandler {
     }
 
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<ErrorResponseModel> handleValidationException(ValidationException e) {
-        return ResponseEntity.status(400).body(e.getErrorResponseModel());
+    public ResponseEntity<ValidationErrorResponseModel> handleValidationException(ValidationException e) {
+        return ResponseEntity.status(400).body(e.getValidationErrorResponseModel());
     }
 
 }
