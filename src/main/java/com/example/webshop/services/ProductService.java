@@ -47,10 +47,6 @@ public class ProductService {
         Product product = findProductById(id);
         ProductFieldsErrorResponseModel errors = new ProductFieldsErrorResponseModel();
 
-        if(productModel.getName() != null) {
-            errors.setNameErrorMessage(validateName(productModel.getName()));
-            product.setName(productModel.getName());
-        }
         if(productModel.getDescription() != null) {
             errors.setDescriptionErrorMessage(validateDescription(productModel.getDescription()));
             product.setDescription(productModel.getDescription());
@@ -65,8 +61,8 @@ public class ProductService {
         }
         product.setFeatured(productModel.isFeatured());
 
-        if(utilService.doesValidationErrorsExists(errors.getNameErrorMessage(), errors.getDescriptionErrorMessage(),
-                errors.getPriceErrorMessage(), errors.getStockErrorMessage())) {
+        if(utilService.doesValidationErrorsExists(errors.getDescriptionErrorMessage(), errors.getPriceErrorMessage(),
+                errors.getStockErrorMessage())) {
             throw new ValidationException(errors);
         }
         Product patchedProduct = productRepository.save(product);

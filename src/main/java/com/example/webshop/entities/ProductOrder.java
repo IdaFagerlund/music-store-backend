@@ -1,7 +1,6 @@
 package com.example.webshop.entities;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,7 +8,7 @@ import java.time.Instant;
 import java.util.List;
 
 @Entity
-@NoArgsConstructor @Getter @Setter
+@Getter @Setter
 public class ProductOrder {
 
     @Id
@@ -18,13 +17,17 @@ public class ProductOrder {
     private Instant timeCreatedUTC;
     @ManyToOne(fetch = FetchType.LAZY)
     private AppUser appUser;
-    @OneToMany(mappedBy = "productOrder", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "productOrder", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<OrderedProduct> orderedProducts;
 
-    public ProductOrder(List<OrderedProduct> products, AppUser appUser) {
+    public ProductOrder() {
+        this.timeCreatedUTC = Instant.now();
+    }
+
+    public ProductOrder(AppUser appUser, List<OrderedProduct> orderedProducts) {
         this.timeCreatedUTC = Instant.now();
         this.appUser = appUser;
-        this.orderedProducts = products;
+        this.orderedProducts = orderedProducts;
     }
 
 }

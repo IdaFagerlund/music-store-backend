@@ -7,21 +7,19 @@ import lombok.Setter;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor @Getter @Setter
 public class ProductOrderResponseModel {
 
     private Instant timeCreatedUTC;
-    private List<ProductResponseModel> products;
+    private List<OrderedProductResponseModel> orderedProducts;
 
     public ProductOrderResponseModel(ProductOrder productOrder) {
         this.timeCreatedUTC = productOrder.getTimeCreatedUTC();
-//        this.products = productOrder.getProducts()
-//                .stream().map(product -> new ProductLightResponseModel(
-//                        product,
-//                        ProductService.getPriceAtOrderTime(product, productOrder))
-//                )
-//                .collect(Collectors.toList());
+        this.orderedProducts = productOrder.getOrderedProducts()
+                .stream().map(OrderedProductResponseModel::new)
+                .collect(Collectors.toList());
     }
 
 }

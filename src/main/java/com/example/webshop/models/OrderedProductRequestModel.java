@@ -8,7 +8,7 @@ import lombok.Setter;
 @NoArgsConstructor @AllArgsConstructor @Getter @Setter
 public class OrderedProductRequestModel {
 
-    private int id;
+    private int productId;
     private int quantity;
 
 }

@@ -6,6 +6,11 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+/**
+ * An order contains OrderedProduct entities instead of Product entities.
+ * An OrderedProduct entity is a copy taken from the Product entity when the order was placed.
+ * This is done so that the Product entity can for example change price or be deleted without the order being affected.
+ */
 @Entity
 @NoArgsConstructor @Getter @Setter
 public class OrderedProduct {
@@ -13,11 +18,18 @@ public class OrderedProduct {
     @Id
     @GeneratedValue
     private Integer id;
-    private double priceAtOrderTime;
+    private int productId;
+    private String productName;
+    private double productPriceAtOrderTime;
     private int quantity;
     @ManyToOne(fetch = FetchType.LAZY)
     private ProductOrder productOrder;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Product product;
+
+    public OrderedProduct(Product product, int quantity) {
+        this.productId = product.getId();
+        this.productName = product.getName();
+        this.productPriceAtOrderTime = product.getPrice();
+        this.quantity = quantity;
+    }
 
 }

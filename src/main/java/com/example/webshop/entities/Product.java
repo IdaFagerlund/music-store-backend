@@ -24,8 +24,6 @@ public class Product {
     private boolean isFeatured;
     @OneToMany(mappedBy = "product", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ProductReview> productReviews;
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private List<OrderedProduct> orderedProducts;
 
     public Product(ProductRequestModel productModel) {
         this.name = productModel.getName();
@@ -34,7 +32,6 @@ public class Product {
         this.stock = productModel.getStock();
         this.isFeatured = productModel.isFeatured();
         this.productReviews = new ArrayList<>();
-        this.orderedProducts = new ArrayList<>();
     }
 
 }
