@@ -10,8 +10,8 @@ public class ProductRequestModel {
 
     private String name;
     private String description;
-    private double price;
-    private int stock;
-    private boolean isFeatured;
+    private Double price;
+    private Integer stock;
+    private boolean featured;
 
 }

@@ -9,14 +9,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor @Getter @Setter
-public class UserDataResponseModel {
+public class AppUserResponseModel {
 
+    private String email;
     private String username;
     private List<ProductReviewResponseModel> productReviews;
     private List<ProductOrderResponseModel> productOrders;
     private List<String> roles;
 
-    public UserDataResponseModel(AppUser appUser) {
+    public AppUserResponseModel(AppUser appUser) {
+        this.email = appUser.getEmail();
         this.username = appUser.getUsername();
         this.productReviews = appUser.getProductReviews()
                 .stream().map(ProductReviewResponseModel::new)

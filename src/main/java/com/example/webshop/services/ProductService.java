@@ -1,15 +1,18 @@
 package com.example.webshop.services;
 
 import com.example.webshop.entities.Product;
-import com.example.webshop.models.ProductFullResponseModel;
-import com.example.webshop.models.ProductLightResponseModel;
+import com.example.webshop.entities.ProductReview;
+import com.example.webshop.exceptions.NotFoundException;
+import com.example.webshop.exceptions.ValidationException;
 import com.example.webshop.models.ProductRequestModel;
+import com.example.webshop.models.ProductResponseModel;
+import com.example.webshop.models.errors.ProductFieldsErrorResponseModel;
 import com.example.webshop.repositories.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -18,99 +21,110 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final UtilService utilService;
 
-//    public static double getPriceAtOrderTime(Product product, ProductOrder productOrder) {
-//        // 1. Sort the list so the prices will be browsed through from the most recent to the oldest.
-//        // 2. Exclude the prices that existed after the order was placed.
-//        // 3. Because the list was sorted, grabbing the first element now returns the price closest to the order time.
-//        Pricing pricingWhenProductWasOrdered = product.getPrices()
-//                .stream()
-//                .sorted((o1, o2) -> o2.getTimeAtPricingUTC().compareTo(o1.getTimeAtPricingUTC()))
-//                .filter(pricing -> productOrder.getTimeCreatedUTC().compareTo(pricing.getTimeAtPricingUTC()) > 0)
-//                .findFirst()
-//                .get();
-//
-//        return pricingWhenProductWasOrdered.getPrice();
-//    }
-
-    public List<ProductLightResponseModel> getAllProductsLightResponse() {
-//        return productRepository.findAll().stream()
-//                .map(product -> new ProductLightResponseModel(product, getCurrentProductPrice(product)))
-//                .collect(Collectors.toList());
-        return null;
+    public List<ProductResponseModel> getAllProducts() {
+        return productRepository.findAll().stream().map(product ->
+                new ProductResponseModel(product, getAverageReviewStars(product)))
+                .collect(Collectors.toList());
     }
 
-    public List<ProductFullResponseModel> getAllProductsFullResponse() {
-//        return productRepository.findAll().stream()
-//                .map(product -> new ProductFullResponseModel(product, getCurrentProductPrice(product)))
-//                .collect(Collectors.toList());
-        return null;
-    }
-
-    public ProductLightResponseModel addProduct(ProductRequestModel newProduct) {
-//        utilService.validateThatFieldsAreNotNullOrEmpty(
-//                newProduct.getName(), newProduct.getDescription()
-//        );
-        validateName(newProduct.getName());
-
-        Product savedProduct = productRepository.save(new Product(newProduct));
-        //return new ProductLightResponseModel(savedProduct, getCurrentProductPrice(savedProduct));
-        return null;
-    }
-
-    public ProductLightResponseModel patchProduct(int id, ProductRequestModel updatedProduct) {
-        Product product = findProductById(id);
-        if(!updatedProduct.getName().equals(product.getName())) {
-            validateName(updatedProduct.getName());
+    public ProductResponseModel addProduct(ProductRequestModel productModel) {
+        ProductFieldsErrorResponseModel errors = new ProductFieldsErrorResponseModel(
+                validateName(productModel.getName()),
+                validateDescription(productModel.getDescription()),
+                validatePrice(productModel.getPrice()),
+                validateStock(productModel.getStock())
+        );
+        if(utilService.doesValidationErrorsExists(errors.getNameErrorMessage(), errors.getDescriptionErrorMessage(),
+                errors.getPriceErrorMessage(), errors.getStockErrorMessage())) {
+            throw new ValidationException(errors);
         }
-        product.setPrice(updatedProduct.getPrice());
-        product.setName(updatedProduct.getName());
-        product.setDescription(updatedProduct.getDescription());
-        product.setStock(updatedProduct.getStock());
-        product.setFeatured(updatedProduct.isFeatured());
 
-        //return new ProductLightResponseModel(productRepository.save(product), getCurrentProductPrice(product));
-        return null;
+        Product savedProduct = productRepository.save(new Product(productModel));
+        return new ProductResponseModel(savedProduct, getAverageReviewStars(savedProduct));
     }
 
-    public void markAsRemoved(int id) {
+    public ProductResponseModel patchProduct(int id, ProductRequestModel productModel) {
         Product product = findProductById(id);
-        productRepository.save(product);
+        ProductFieldsErrorResponseModel errors = new ProductFieldsErrorResponseModel();
+
+        if(productModel.getName() != null) {
+            errors.setNameErrorMessage(validateName(productModel.getName()));
+            product.setName(productModel.getName());
+        }
+        if(productModel.getDescription() != null) {
+            errors.setDescriptionErrorMessage(validateDescription(productModel.getDescription()));
+            product.setDescription(productModel.getDescription());
+        }
+        if(productModel.getPrice() != null) {
+            errors.setPriceErrorMessage(validatePrice(productModel.getPrice()));
+            product.setPrice(productModel.getPrice());
+        }
+        if(productModel.getStock() != null) {
+            errors.setStockErrorMessage(validateStock(productModel.getStock()));
+            product.setStock(productModel.getStock());
+        }
+        product.setFeatured(productModel.isFeatured());
+
+        if(utilService.doesValidationErrorsExists(errors.getNameErrorMessage(), errors.getDescriptionErrorMessage(),
+                errors.getPriceErrorMessage(), errors.getStockErrorMessage())) {
+            throw new ValidationException(errors);
+        }
+        Product patchedProduct = productRepository.save(product);
+        return new ProductResponseModel(patchedProduct, getAverageReviewStars(patchedProduct));
     }
 
     public void deleteProduct(int id) {
         productRepository.delete(findProductById(id));
     }
 
-//    protected void updateAverageReviewStars(int productId) {
-//        Product product = findProductById(productId);
-//        double newAverageReviewStars = product.getProductReviews()
-//                .stream().map(ProductReview::getStars)
-//                .mapToInt(x -> x)
-//                .summaryStatistics()
-//                .getAverage();
-//        product.setAverageReviewStars((int) Math.round(newAverageReviewStars));
-//        productRepository.save(product);
-//    }
-
     protected Product findProductById(int id) {
-        return null;
-//        return productRepository.findById(id)
-//                .orElseThrow(() -> new NotFoundException("Can not access an unexisting product"));
+        return productRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
-//    protected double getCurrentProductPrice(Product product) {
-//        return product.getPrices()
-//                .stream()
-//                .max(Comparator.comparing(Pricing::getTimeAtPricingUTC))
-//                .get()
-//                .getPrice();
-//    }
+    private int getAverageReviewStars(Product product) {
+        double averageStars = product.getProductReviews()
+                .stream().map(ProductReview::getStars)
+                .mapToInt(x -> x)
+                .summaryStatistics()
+                .getAverage();
+        return (int) Math.round(averageStars);
+    }
 
-    private void validateName(String name) {
-        Optional<Product> product = productRepository.findByName(name);
-        if(product.isPresent()) {
-            //throw new ValidationException(409, "Unavailable name");
+    private String validateName(String name) {
+        if(utilService.isFieldNullOrEmpty(name)) {
+            return "Missing name";
         }
+        else if(productRepository.findByName(name).isPresent()) {
+            return "Unavailable name";
+        }
+        return null;
+    }
+
+    private String validateDescription(String description) {
+        if(utilService.isFieldNullOrEmpty(description)) {
+            return "Missing description";
+        }
+        return null;
+    }
+
+    private String validatePrice(Double price) {
+        if(price == null) {
+            return "Missing price";
+        }
+        else if(price < 0) {
+            return "Price can't be a negative amount";
+        }
+        return null;
+    }
+
+    private String validateStock(Integer stock) {
+        if(stock == null) {
+            return "Missing stock";
+        }
+        if(stock < 0) {
+            return "Stock can't be a negative amount";
+        }
+        return null;
     }
 
 }

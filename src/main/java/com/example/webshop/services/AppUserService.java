@@ -4,8 +4,8 @@ import com.example.webshop.entities.AppUser;
 import com.example.webshop.exceptions.NotFoundException;
 import com.example.webshop.exceptions.ValidationException;
 import com.example.webshop.models.AppUserRequestModel;
-import com.example.webshop.models.UserDataResponseModel;
-import com.example.webshop.models.errors.RegisterErrorResponseModel;
+import com.example.webshop.models.AppUserResponseModel;
+import com.example.webshop.models.errors.UserFieldsErrorResponseModel;
 import com.example.webshop.repositories.AppUserRepository;
 import com.example.webshop.repositories.UserRoleRepository;
 import com.example.webshop.security.UserRoleEnum;
@@ -27,13 +27,12 @@ public class AppUserService {
     private final UtilService utilService;
 
     public void register(AppUserRequestModel appUserModel) {
-
-        RegisterErrorResponseModel errors = new RegisterErrorResponseModel(
+        UserFieldsErrorResponseModel errors = new UserFieldsErrorResponseModel(
                 validateEmail(appUserModel.getEmail()),
                 validateUsername(appUserModel.getUsername()),
                 validatePassword(appUserModel.getPassword())
         );
-        if(utilService.doesErrorsExists(errors.getEmailErrorMessage(), errors.getUsernameErrorMessage(),
+        if(utilService.doesValidationErrorsExists(errors.getEmailErrorMessage(), errors.getUsernameErrorMessage(),
                 errors.getPasswordErrorMessage())) {
             throw new ValidationException(errors);
         }
@@ -43,25 +42,33 @@ public class AppUserService {
                 bCryptPasswordEncoder.encode(appUserModel.getPassword()),
                 appUserModel.getEmail()
         );
-        System.out.println(newAppUser.getPassword());
         newAppUser.getUserRoles().add(userRoleRepository.findByUserRole(UserRoleEnum.ROLE_USER));
         appUserRepository.save(newAppUser);
     }
 
-    public UserDataResponseModel getAllDataForUser(Principal principal) {
-        return new UserDataResponseModel(findByUsername(principal.getName()));
+    public AppUserResponseModel getAllDataForUser(Principal principal) {
+        return new AppUserResponseModel(findByUsername(principal.getName()));
     }
 
-    public String patchUser(Principal principal, AppUserRequestModel appUserModel) {
+    public AppUserResponseModel patchUser(Principal principal, AppUserRequestModel appUserModel) {
         AppUser appUser = findByUsername(principal.getName());
-        if(appUser.getUsername() != null) {
+        UserFieldsErrorResponseModel errors = new UserFieldsErrorResponseModel();
+
+        if(appUserModel.getUsername() != null) {
+            errors.setUsernameErrorMessage(validateUsername(appUserModel.getUsername()));
             appUser.setUsername(appUserModel.getUsername());
         }
-        if(appUser.getPassword() != null) {
+        if(appUserModel.getPassword() != null) {
+            errors.setPasswordErrorMessage(validatePassword(appUserModel.getPassword()));
             appUser.setPassword(bCryptPasswordEncoder.encode(appUserModel.getPassword()));
         }
+
+        if(utilService.doesValidationErrorsExists(errors.getUsernameErrorMessage(), errors.getPasswordErrorMessage())) {
+            throw new ValidationException(errors);
+        }
+
         appUserRepository.save(appUser);
-        return appUser.getUsername();
+        return new AppUserResponseModel(appUser);
     }
 
     public AppUser findByUsername(String username) {

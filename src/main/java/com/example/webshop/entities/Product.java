@@ -30,6 +30,7 @@ public class Product {
     public Product(ProductRequestModel productModel) {
         this.name = productModel.getName();
         this.description = productModel.getDescription();
+        this.price = productModel.getPrice();
         this.stock = productModel.getStock();
         this.isFeatured = productModel.isFeatured();
         this.productReviews = new ArrayList<>();

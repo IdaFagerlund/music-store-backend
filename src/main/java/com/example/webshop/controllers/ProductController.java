@@ -1,8 +1,7 @@
 package com.example.webshop.controllers;
 
-import com.example.webshop.models.ProductFullResponseModel;
-import com.example.webshop.models.ProductLightResponseModel;
 import com.example.webshop.models.ProductRequestModel;
+import com.example.webshop.models.ProductResponseModel;
 import com.example.webshop.services.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,23 +18,18 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/all/light")
-    public ResponseEntity<List<ProductLightResponseModel>> getAllProductsLightResponse() {
-        return ResponseEntity.status(200).body(productService.getAllProductsLightResponse());
-    }
-
-    @GetMapping("/all/full")
-    public ResponseEntity<List<ProductFullResponseModel>> getAllProductsFullResponse() {
-        return ResponseEntity.status(200).body(productService.getAllProductsFullResponse());
+    @GetMapping("/all")
+    public ResponseEntity<List<ProductResponseModel>> getAllProducts() {
+        return ResponseEntity.status(200).body(productService.getAllProducts());
     }
 
     @PostMapping("/")
-    public ResponseEntity<ProductLightResponseModel> addProduct(@RequestBody ProductRequestModel product) {
+    public ResponseEntity<ProductResponseModel> addProduct(@RequestBody ProductRequestModel product) {
         return ResponseEntity.status(201).body(productService.addProduct(product));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ProductLightResponseModel> patchProduct(@PathVariable int id,
+    public ResponseEntity<ProductResponseModel> patchProduct(@PathVariable int id,
                                                                   @RequestBody ProductRequestModel product) {
         return ResponseEntity.status(200).body(productService.patchProduct(id, product));
     }

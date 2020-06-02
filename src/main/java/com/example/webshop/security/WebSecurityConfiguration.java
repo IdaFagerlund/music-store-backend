@@ -30,17 +30,16 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
 
-                .antMatchers(HttpMethod.GET, "/users/accesstest/all").permitAll()
-                .antMatchers(HttpMethod.POST, "/users/accesstest/post").permitAll()
-                .antMatchers(HttpMethod.GET, "/users/accesstest/user").hasRole("USER")
-                .antMatchers(HttpMethod.GET, "/users/accesstest/admin").hasRole("ADMIN")
+//                .antMatchers(HttpMethod.GET, "/users/accesstest/all").permitAll()
+//                .antMatchers(HttpMethod.GET, "/users/accesstest/user").hasRole("USER")
+//                .antMatchers(HttpMethod.GET, "/users/accesstest/admin").hasRole("ADMIN")
 
                 .antMatchers(HttpMethod.POST, "/users/register").permitAll()
                 .antMatchers(HttpMethod.GET, "/users/").hasRole("USER")
                 .antMatchers(HttpMethod.PATCH, "/users/").hasRole("USER")
 
-                .antMatchers(HttpMethod.GET, "/products/all/light").permitAll()
-                .antMatchers(HttpMethod.GET, "/products/all/full").permitAll()
+                .antMatchers(HttpMethod.GET, "/products/all").permitAll()
+
                 .antMatchers(HttpMethod.POST, "/products/").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PATCH, "/products/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/products/").hasRole("ADMIN")

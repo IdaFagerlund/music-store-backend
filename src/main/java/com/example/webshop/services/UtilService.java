@@ -8,7 +8,7 @@ import java.util.Objects;
 @Service
 public class UtilService {
 
-    public boolean doesErrorsExists(String... args) {
+    public boolean doesValidationErrorsExists(String... args) {
         return Arrays.stream(args).anyMatch(Objects::nonNull);
     }
 

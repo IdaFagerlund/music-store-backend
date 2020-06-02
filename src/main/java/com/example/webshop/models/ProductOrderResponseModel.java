@@ -12,7 +12,7 @@ import java.util.List;
 public class ProductOrderResponseModel {
 
     private Instant timeCreatedUTC;
-    private List<ProductLightResponseModel> products;
+    private List<ProductResponseModel> products;
 
     public ProductOrderResponseModel(ProductOrder productOrder) {
         this.timeCreatedUTC = productOrder.getTimeCreatedUTC();
