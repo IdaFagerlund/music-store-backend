@@ -14,6 +14,7 @@ public class ProductReview {
     @Id
     @GeneratedValue
     private Integer id;
+    @Column(length = 1200)
     private String comment;
     private int stars;
     private Instant timeCreatedUTC;

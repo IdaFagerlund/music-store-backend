@@ -18,6 +18,7 @@ public class Product {
     private Integer id;
     @Column(unique = true)
     private String name;
+    @Column(length = 1200)
     private String description;
     private double price;
     private int stock;
