@@ -35,21 +35,4 @@ public class AppUserController {
         return ResponseEntity.status(200).body(appUserService.patchUser(principal, appUser));
     }
 
-
-
-
-
-//    @GetMapping("/accesstest/all")
-//    public String asdasd() {
-//        return "all";
-//    }
-//    @GetMapping("/accesstest/user")
-//    public String asdasdasd() {
-//        return "user";
-//    }
-//    @GetMapping("/accesstest/admin")
-//    public String asdaddsd() {
-//        return "admin";
-//    }
-
 }

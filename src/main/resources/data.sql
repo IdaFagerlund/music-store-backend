@@ -8,3 +8,9 @@ VALUES (1003, "user", "$2a$10$48A4EwdmMTgfHKGZ2v/7R.SKRMBjsPQsBoj6YygWA2yRcpTouV
 
 INSERT INTO app_user_user_role (app_user_id, user_role_id)
 VALUES (1003, 1000), (1004, 1001), (1005, 1002);
+
+INSERT INTO product(id, name, description, price, stock, is_featured)
+VALUES (1006, "The product name", "The description", 50.50, 10, 1);
+
+INSERT INTO product_review(id, comment, last_time_updatedutc, stars, time_createdutc, app_user_id, product_id)
+VALUES (1007, "Amazing!", "2020-01-22T00:00:00", 4, "2020-01-21T00:00:00", 1003, 1006);

@@ -3,6 +3,8 @@ package com.example.webshop.services;
 import com.example.webshop.entities.AppUser;
 import com.example.webshop.entities.Product;
 import com.example.webshop.entities.ProductReview;
+import com.example.webshop.exceptions.NotFoundException;
+import com.example.webshop.exceptions.ValidationException;
 import com.example.webshop.models.ProductReviewRequestModel;
 import com.example.webshop.models.ProductReviewResponseModel;
 import com.example.webshop.repositories.ProductReviewRepository;
@@ -29,57 +31,61 @@ public class ProductReviewService {
                 .collect(Collectors.toList());
     }
 
-    public ProductReviewResponseModel addProductReview(int productId, ProductReviewRequestModel productReviewModel,
-                                                       Principal principal) {
-        //utilService.validateThatFieldsAreNotNullOrEmpty(productReviewModel.getComment());
-        Product product = productService.findProductById(productId);
+    public ProductReviewResponseModel addProductReview(int productId, ProductReviewRequestModel productReviewModel, Principal principal) {
         AppUser appUser = appUserService.findByUsername(principal.getName());
-        validateProductHasNotBeenReviewedByUsedBefore(product, appUser);
+        Product product = productService.findProductById(productId);
+
+        validateProductReview(productReviewModel);
+        boolean haveUserAlreadyReviewedThisProduct = appUser.getProductReviews()
+                .stream().anyMatch(productReview -> productReview.getProduct().getId() == productId);
+        if(haveUserAlreadyReviewedThisProduct) {
+            throw new ValidationException();
+        }
 
         ProductReview productReview = new ProductReview(productReviewModel);
-        productReview.setProduct(product);
         productReview.setAppUser(appUser);
+        productReview.setProduct(product);
 
-        ProductReview savedReview = productReviewRepository.save(productReview);
-        //productService.updateAverageReviewStars(productId);
-        return new ProductReviewResponseModel(savedReview);
+        return new ProductReviewResponseModel(productReviewRepository.save(productReview));
     }
 
-    public ProductReviewResponseModel patchProductReview(int productId,
-                                                         ProductReviewRequestModel updatedProductReview,
-                                                         Principal principal) {
-        Product product = productService.findProductById(productId);
-        ProductReview productReview = product.getProductReviews()
-                .stream().filter(review -> review.getAppUser().getUsername().equals(principal.getName()))
-                .findFirst().get();
+   public ProductReviewResponseModel patchProductReview(int productId, ProductReviewRequestModel productReviewModel, Principal principal) {
+       validateProductReview(productReviewModel);
 
-        productReview.setComment(updatedProductReview.getComment());
-        productReview.setStars(updatedProductReview.getStars());
-        productReview.setLastTimeUpdatedUTC(Instant.now());
+       ProductReview productReview = findProductReview(
+               productService.findProductById(productId),
+               principal.getName()
+       );
 
-        ProductReview savedReview = productReviewRepository.save(productReview);
-        //productService.updateAverageReviewStars(productId);
-        return new ProductReviewResponseModel(savedReview);
-    }
+       productReview.setStars(productReviewModel.getStars());
+       productReview.setComment(productReviewModel.getComment());
+       productReview.setLastTimeUpdatedUTC(Instant.now());
 
-    public void deleteProductReview(int productId) {
-        Product product = productService.findProductById(productId);
-        ProductReview productReview = product.getProductReviews()
-                .stream().filter(review -> review.getAppUser().getId() == 1)
-                .findFirst().get();
+       return new ProductReviewResponseModel(productReviewRepository.save(productReview));
+   }
 
-        productReview.getAppUser().getProductReviews().remove(productReview);
-        productReview.getProduct().getProductReviews().remove(productReview);
+   public void deleteProductReview(int productId, Principal principal) {
+       ProductReview productReview = findProductReview(
+               productService.findProductById(productId),
+               principal.getName()
+       );
+       productReviewRepository.delete(productReview);
+   }
 
-        productReviewRepository.delete(productReview);
-        //productService.updateAverageReviewStars(productId);
-    }
+   public ProductReview findProductReview(Product product, String username) {
+       return product.getProductReviews()
+               .stream().filter(review -> review.getAppUser().getUsername().equals(username))
+               .findFirst()
+               .orElseThrow(NotFoundException::new);
+   }
 
-    private void validateProductHasNotBeenReviewedByUsedBefore(Product product, AppUser appUser) {
-//        appUser.getProductReviews()
-//                .stream().filter(product.getProductReviews()::contains)
-//                .findAny()
-//                .orElseThrow(() -> new ValidationException(409, "Can not review the same product twice"));
-    }
+   public void validateProductReview(ProductReviewRequestModel productReviewModel) {
+       boolean isReviewMissingComment = utilService.isFieldNullOrEmpty(productReviewModel.getComment());
+       boolean isStarsNotAnExpectedValue = productReviewModel.getStars() < 0 || productReviewModel.getStars() > 5;
+
+       if(isReviewMissingComment || isStarsNotAnExpectedValue) {
+           throw new ValidationException();
+       }
+   }
 
 }
