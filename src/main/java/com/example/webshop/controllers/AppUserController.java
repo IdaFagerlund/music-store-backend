@@ -20,7 +20,6 @@ public class AppUserController {
 
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody AppUserRequestModel appUser) {
-        System.out.println("trying to register");
         appUserService.register(appUser);
         return ResponseEntity.status(201).build();
     }
