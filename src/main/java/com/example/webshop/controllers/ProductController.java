@@ -1,5 +1,6 @@
 package com.example.webshop.controllers;
 
+import com.example.webshop.models.ProductCategoryResponseModel;
 import com.example.webshop.models.ProductRequestModel;
 import com.example.webshop.models.ProductResponseModel;
 import com.example.webshop.services.ProductService;
@@ -32,6 +33,11 @@ public class ProductController {
     public ResponseEntity<ProductResponseModel> patchProduct(@PathVariable int id,
                                                                   @RequestBody ProductRequestModel product) {
         return ResponseEntity.status(200).body(productService.patchProduct(id, product));
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<List<ProductCategoryResponseModel>> getProductCategories() {
+        return ResponseEntity.status(200).body(productService.getProductCategories());
     }
 
     @DeleteMapping("/{id}")

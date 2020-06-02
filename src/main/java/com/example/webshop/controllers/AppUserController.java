@@ -35,4 +35,6 @@ public class AppUserController {
         return ResponseEntity.status(200).body(appUserService.patchUser(principal, appUser));
     }
 
+    // + @GetMapping("/login") that is defined in the security configuration
+
 }

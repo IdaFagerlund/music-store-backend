@@ -22,6 +22,8 @@ public class Product {
     private double price;
     private int stock;
     private boolean isFeatured;
+    private String category;
+    private String subCategory;
     @OneToMany(mappedBy = "product", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ProductReview> productReviews;
 
@@ -31,6 +33,8 @@ public class Product {
         this.price = productModel.getPrice();
         this.stock = productModel.getStock();
         this.isFeatured = productModel.isFeatured();
+        this.category = productModel.getCategory();
+        this.subCategory = productModel.getSubCategory();
         this.productReviews = new ArrayList<>();
     }
 

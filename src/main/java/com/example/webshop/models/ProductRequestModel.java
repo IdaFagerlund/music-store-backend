@@ -12,6 +12,8 @@ public class ProductRequestModel {
     private String description;
     private Double price;
     private Integer stock;
+    private String category;
+    private String subCategory;
     private boolean featured;
 
 }

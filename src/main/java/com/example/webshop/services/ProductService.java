@@ -4,6 +4,7 @@ import com.example.webshop.entities.Product;
 import com.example.webshop.entities.ProductReview;
 import com.example.webshop.exceptions.NotFoundException;
 import com.example.webshop.exceptions.ValidationException;
+import com.example.webshop.models.ProductCategoryResponseModel;
 import com.example.webshop.models.ProductRequestModel;
 import com.example.webshop.models.ProductResponseModel;
 import com.example.webshop.models.errors.ProductFieldsErrorResponseModel;
@@ -11,7 +12,7 @@ import com.example.webshop.repositories.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +29,7 @@ public class ProductService {
     }
 
     public ProductResponseModel addProduct(ProductRequestModel productModel) {
+        validateCategories(productModel.getCategory(), productModel.getSubCategory());
         ProductFieldsErrorResponseModel errors = new ProductFieldsErrorResponseModel(
                 validateName(productModel.getName()),
                 validateDescription(productModel.getDescription()),
@@ -45,6 +47,7 @@ public class ProductService {
 
     public ProductResponseModel patchProduct(int id, ProductRequestModel productModel) {
         Product product = findProductById(id);
+        validateCategories(productModel.getCategory(), productModel.getSubCategory());
         ProductFieldsErrorResponseModel errors = new ProductFieldsErrorResponseModel();
 
         if(productModel.getDescription() != null) {
@@ -73,8 +76,34 @@ public class ProductService {
         productRepository.delete(findProductById(id));
     }
 
+    public List<ProductCategoryResponseModel> getProductCategories() {
+        List<ProductCategoryResponseModel> productCategories = new ArrayList<>();
+        getAvailableProductCategories().forEach((key, value) ->
+                productCategories.add(new ProductCategoryResponseModel(key, value))
+        );
+        return productCategories;
+    }
+
     protected Product findProductById(int id) {
         return productRepository.findById(id).orElseThrow(NotFoundException::new);
+    }
+
+    private Map<String, List<String>> getAvailableProductCategories() {
+        return new HashMap<String, List<String>>(){{
+            put("All", new ArrayList<>());
+            put("Guitars", Arrays.asList("Electric", "Acoustic"));
+            put("Pianos", Arrays.asList("Grand pianos", "Keyboards"));
+            put("Drums", new ArrayList<>());
+            put("Other", new ArrayList<>());
+        }};
+    }
+
+    private void validateCategories(String category, String subCategory) {
+        Map<String, List<String>> availableCategories = getAvailableProductCategories();
+        if(availableCategories.get(category) == null || (!availableCategories.get(category).isEmpty() &&
+                !availableCategories.get(category).contains(subCategory))) {
+            throw new ValidationException();
+        }
     }
 
     private int getAverageReviewStars(Product product) {

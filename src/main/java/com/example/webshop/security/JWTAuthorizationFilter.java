@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static com.example.webshop.security.SecurityConstants.*;
+import static com.example.webshop.security.JWTConstants.*;
 
 // Validates the JWT in all subsequent requests after a successful login
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
@@ -55,7 +55,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             Claim roles = JWT.require(Algorithm.HMAC512(SECRET.getBytes()))
                     .build()
                     .verify(token.replace(TOKEN_PREFIX, ""))
-                    .getClaim("authorities");
+                    .getClaim(CLAIMS);
 
             Collection<? extends GrantedAuthority>  authorities = roles.asList(String.class)
                     .stream().map(SimpleGrantedAuthority::new)

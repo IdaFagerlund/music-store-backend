@@ -22,7 +22,7 @@ import java.io.OutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.example.webshop.security.SecurityConstants.*;
+import static com.example.webshop.security.JWTConstants.*;
 
 // Methods that run on login
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -33,7 +33,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.authenticationManager = authenticationManager;
         setFilterProcessesUrl("/users/login");
     }
-
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
@@ -62,7 +61,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String token = JWT.create()
                 .withSubject(((User) authResult.getPrincipal()).getUsername())
-                .withClaim("authorities", userRoles)
+                .withClaim(CLAIMS, userRoles)
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(Algorithm.HMAC512(SECRET.getBytes()));
         response.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
