@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+
+  mysql:
+    container_name: mysql
+    restart: always
+    image: mysql:8.0.16
+    environment:
+      MYSQL_DATABASE: 'webshop'
+      MYSQL_ROOT_USER: 'root'
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - '3306:3306'
+    volumes:
+      - db-volume:/var/lib/mysql
+
+
+  spring-server:
+    container_name: spring-server
+    build: ./
+    depends_on:
+      - mysql
+    restart: on-failure:5
+    ports:
+      - '8080:8080'
+    links:
+      - mysql
+
+
+volumes:
+  db-volume:
