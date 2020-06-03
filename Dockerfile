@@ -5,7 +5,7 @@ FROM openjdk:8-jdk-alpine AS build
 RUN apk add --no-cache maven
 WORKDIR /app
 COPY . .
-RUN mvn package -DskipTests
+RUN mvn clean install -DskipTests
 
 # --- run jar ---
 FROM openjdk:8-jre-alpine
