@@ -30,6 +30,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
 
+                .antMatchers(HttpMethod.GET, "/test/").permitAll()
+
                 .antMatchers(HttpMethod.POST, "/users/register").permitAll()
                 .antMatchers(HttpMethod.GET, "/users/").hasRole("USER")
                 .antMatchers(HttpMethod.PATCH, "/users/").hasRole("USER")
