@@ -30,6 +30,11 @@ public class ProductController {
         return ResponseEntity.status(200).body(productService.getAllProductsLightVersion());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductFullVersionResponseModel> getProduct(@PathVariable int id) {
+        return ResponseEntity.status(200).body(productService.findById(id));
+    }
+
     @PostMapping("/")
     public ResponseEntity<ProductFullVersionResponseModel> addProduct(@RequestBody ProductRequestModel product) {
         return ResponseEntity.status(201).body(productService.addProduct(product));

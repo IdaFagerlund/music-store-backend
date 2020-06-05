@@ -28,11 +28,14 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    // This one is indented for the product browse page so the frontend only needs to load the minimal amount of data for each page
     public List<ProductLightVersionResponseModel> getAllProductsLightVersion() {
         return productRepository.findAll().stream().map(product ->
                 new ProductLightVersionResponseModel(product, product.getProductReviews().size(), getAverageReviewStars(product)))
                 .collect(Collectors.toList());
+    }
+
+    public ProductFullVersionResponseModel findById(int id) {
+        return new ProductFullVersionResponseModel(findProductById(id));
     }
 
     public ProductFullVersionResponseModel addProduct(ProductRequestModel productModel) {

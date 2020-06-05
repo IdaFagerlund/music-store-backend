@@ -6,28 +6,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor @Getter @Setter
-public class ProductLightVersionResponseModel {
+public class ProductLightVersionResponseModel extends ProductResponseModel {
 
-    private int id;
-    private String name;
-    private String description;
-    private double price;
-    private int stock;
-    private boolean isFeatured;
-    private String category;
-    private String subCategory;
     private int numberOfReviews;
     private int averageReviewStars;
 
     public ProductLightVersionResponseModel(Product product, int numberOfReviews, int averageReviewStars) {
-        this.id = product.getId();
-        this.name = product.getName();
-        this.description = product.getDescription();
-        this.price = product.getPrice();
-        this.stock = product.getStock();
-        this.isFeatured = product.isFeatured();
-        this.category = product.getCategory();
-        this.subCategory = product.getSubCategory();
+        super(product);
         this.numberOfReviews = numberOfReviews;
         this.averageReviewStars = averageReviewStars;
     }
