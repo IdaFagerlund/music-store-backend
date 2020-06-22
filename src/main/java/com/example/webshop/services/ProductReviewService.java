@@ -81,7 +81,7 @@ public class ProductReviewService {
 
    public void validateProductReview(ProductReviewRequestModel productReviewModel) {
        boolean isReviewMissingComment = utilService.isFieldNullOrEmpty(productReviewModel.getComment());
-       boolean isStarsNotAnExpectedValue = productReviewModel.getStars() < 0 || productReviewModel.getStars() > 5;
+       boolean isStarsNotAnExpectedValue = productReviewModel.getStars() < 1 || productReviewModel.getStars() > 5;
 
        if(isReviewMissingComment || isStarsNotAnExpectedValue) {
            throw new ValidationException();
